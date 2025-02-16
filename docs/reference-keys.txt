@@ -1,3 +1,5 @@
 introduction
-big-data
-observational-data
+genome-wide-association-studies-gwas
+introduction-to-gwas
+some-vocabulary
+genetic-ancestry
