@@ -48,6 +48,8 @@ $$
   We are able to use this model as our data has more rows than columns, or SNPs. But what happens when we have a data set where there are more columns than there are rows $(p>n)$?
 
   The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The "study" we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?
+  
+## Simulating a GWAS
 
 
 

@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-02-16" />
+<meta name="date" content="2025-02-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -79,10 +79,9 @@
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html"><i class="fa fa-check"></i><b>2</b> Genome-Wide Association Studies (GWAS)</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#introduction-to-gwas"><i class="fa fa-check"></i><b>2.1</b> Introduction to GWAS</a>
-<ul>
-<li class="chapter" data-level="2.1.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#some-vocabulary"><i class="fa fa-check"></i><b>2.1.1</b> Some Vocabulary</a></li>
-</ul></li>
+<li class="chapter" data-level="2.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#some-vocabulary"><i class="fa fa-check"></i><b>2.1</b> Some Vocabulary</a></li>
+<li class="chapter" data-level="2.2" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#introduction-to-gwas"><i class="fa fa-check"></i><b>2.2</b> Introduction to GWAS</a></li>
+<li class="chapter" data-level="2.3" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#simulating-a-gwas"><i class="fa fa-check"></i><b>2.3</b> Simulating a GWAS</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html"><i class="fa fa-check"></i><b>3</b> Genetic Ancestry</a></li>
 <li class="divider"></li>
@@ -107,13 +106,11 @@
             <section class="normal" id="section-">
 <div id="genome-wide-association-studies-gwas" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number"> 2</span> Genome-Wide Association Studies (GWAS)<a href="genome-wide-association-studies-gwas.html#genome-wide-association-studies-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="introduction-to-gwas" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Introduction to GWAS<a href="genome-wide-association-studies-gwas.html#introduction-to-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="some-vocabulary" class="section level3 hasAnchor" number="2.1.1">
-<h3><span class="header-section-number">2.1.1</span> Some Vocabulary<a href="genome-wide-association-studies-gwas.html#some-vocabulary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>There are many terms that come along with talking about genetic data. The following are terms to remember as you read this unit summary. Refer to this list if you forget what a term means.</p>
+<div id="some-vocabulary" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> Some Vocabulary<a href="genome-wide-association-studies-gwas.html#some-vocabulary" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are many terms that come along with talking about genetic data. The following are more biology related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.</p>
 <ul>
-<li><p><u><em>SNPs (single nucleotide polymorphisms)</em></u>: a single nucleotide at a specific position in the genome</p>
+<li><p><u><em>SNPs (single nucleotide polymorphisms)</em></u>: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population</p>
 <ul>
 <li><p><u><em>Genome</em></u>: complete set of genes or genetic material</p></li>
 <li><p><u><em>Chromosome</em></u>: condensed DNA structure, all chromosomes together is the genome</p></li>
@@ -122,15 +119,66 @@
 <ul>
 <li><u><em>SNV (single nucleotide variant)</em></u>: a single nucleotide change in the DNA sequence. <em>SNP</em> and <em>SNV</em> are typically used interchangeably. You might see <em>SNP</em> used in instances where the minor allele is not too rare</li>
 </ul></li>
-<li><p><u><em>Allele</em></u>: the different possible nucleotides at some position. The combinations are <em>A</em> with <em>T</em> and <em>G</em> with <em>C</em></p></li>
+<li><p><u><em>Allele</em></u>: the different possible nucleotides at some position. The combinations are <em>A</em> - <em>T</em> and <em>G</em> - <em>C</em></p></li>
 <li><p><u><em>Minor allele</em></u>: at this location, which allele is the least common</p>
 <ul>
 <li><u><em>MAF (minor allele frequency)</em></u>: the frequency of the minor allele, can get very small</li>
 </ul></li>
 <li><p><u><em>Loci/locus</em></u>: means location, can be used to refer to a single <em>SNP</em> or a larger region in the genome</p></li>
 </ul>
-
 </div>
+<div id="introduction-to-gwas" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Introduction to GWAS<a href="genome-wide-association-studies-gwas.html#introduction-to-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When looking at human DNA, we can see that between any two people, their genomes would be almost exactly identical. However, there are places where their DNA sequences differ. These are called <em>genetic variants</em>. Sometimes these variants mean nothing, other times they have been found to be linked to certain traits or health problems. The goal of a genome-wide association study (GWAS), is to determine which genetic variants are associated with a given trait of interest.</p>
+<p>Below is an example of a small study of nucleotides/alleles that can be different at some place along the DNA sequence. The goal of this GWAS study is to see if the pairings of alleles at certain positions have some effect on the trait.</p>
+<table>
+<thead>
+<tr class="header">
+<th>person-id</th>
+<th>allele-1</th>
+<th>allele-2</th>
+<th>trait</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10005</td>
+<td>A</td>
+<td>A</td>
+<td>60</td>
+</tr>
+<tr class="even">
+<td>10006</td>
+<td>A</td>
+<td>G</td>
+<td>67</td>
+</tr>
+<tr class="odd">
+<td>10007</td>
+<td>G</td>
+<td>A</td>
+<td>68</td>
+</tr>
+<tr class="even">
+<td>10008</td>
+<td>A</td>
+<td>A</td>
+<td>62</td>
+</tr>
+</tbody>
+</table>
+<p>To set up a simple linear regression model to predict our trait with the data we have in this table, it might look something like the below model. In the model, GG is the comparison group.
+<span class="math display">\[
+\begin{align}
+\text{height } \thicksim \beta_0 + \beta_1 \text{AA} + \beta_2 \text{AG}
+\end{align}
+\]</span></p>
+<p>We are able to use this model as our data has more rows than columns, or SNPs. But what happens when we have a data set where there are more columns than there are rows <span class="math inline">\((p&gt;n)\)</span>?</p>
+<p>The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The “study” we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?</p>
+</div>
+<div id="simulating-a-gwas" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Simulating a GWAS<a href="genome-wide-association-studies-gwas.html#simulating-a-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
 </div>
 </div>
             </section>
@@ -193,6 +241,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

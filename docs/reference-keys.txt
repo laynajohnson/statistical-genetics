@@ -1,5 +1,6 @@
 introduction
 genome-wide-association-studies-gwas
-introduction-to-gwas
 some-vocabulary
+introduction-to-gwas
+simulating-a-gwas
 genetic-ancestry
