@@ -1,8 +1,7 @@
 # Genome-Wide Association Studies (GWAS)
 
-## Introduction to GWAS
 
-### Some Vocabulary
+## Some Vocabulary
 
 There are many terms that come along with talking about genetic data. The following are terms to remember as you read this unit summary. Refer to this list if you forget what a term means.
 
@@ -23,3 +22,9 @@ There are many terms that come along with talking about genetic data. The follow
     -   [*MAF (minor allele frequency)*]{.underline}: the frequency of the minor allele, can get very small
 
 -   [*Loci/locus*]{.underline}: means location, can be used to refer to a single *SNP* or a larger region in the genome
+
+
+## Introduction to GWAS
+
+  When looking at human DNA, we can see that between any two people, their genomes would be almost exactly identical. However, there are places where their DNA sequences differ. These are called *genetic variants*. Sometimes these variants mean nothing, other times they have been found to be linked to certain traits or health problems. The goal of a genome-wide association study (GWAS), is to determine which genetic variants are associated with a given trait of interest. 
+
