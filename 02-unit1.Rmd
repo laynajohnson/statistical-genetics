@@ -3,9 +3,9 @@
 
 ## Some Vocabulary
 
-There are many terms that come along with talking about genetic data. The following are terms to remember as you read this unit summary. Refer to this list if you forget what a term means.
+There are many terms that come along with talking about genetic data. The following are more biology related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.
 
--   [*SNPs (single nucleotide polymorphisms)*]{.underline}: a single nucleotide at a specific position in the genome
+-   [*SNPs (single nucleotide polymorphisms)*]{.underline}: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population
 
     -   [*Genome*]{.underline}: complete set of genes or genetic material
 
@@ -15,7 +15,7 @@ There are many terms that come along with talking about genetic data. The follow
 
     -   [*SNV (single nucleotide variant)*]{.underline}: a single nucleotide change in the DNA sequence. *SNP* and *SNV* are typically used interchangeably. You might see *SNP* used in instances where the minor allele is not too rare
 
--   [*Allele*]{.underline}: the different possible nucleotides at some position. The combinations are *A* with *T* and *G* with *C*
+-   [*Allele*]{.underline}: the different possible nucleotides at some position. The combinations are *A* - *T* and *G* - *C*
 
 -   [*Minor allele*]{.underline}: at this location, which allele is the least common
 
@@ -27,4 +27,46 @@ There are many terms that come along with talking about genetic data. The follow
 ## Introduction to GWAS
 
   When looking at human DNA, we can see that between any two people, their genomes would be almost exactly identical. However, there are places where their DNA sequences differ. These are called *genetic variants*. Sometimes these variants mean nothing, other times they have been found to be linked to certain traits or health problems. The goal of a genome-wide association study (GWAS), is to determine which genetic variants are associated with a given trait of interest. 
+
+  Below is an example of a small study of nucleotides/alleles that can be different at some place along the DNA sequence. The goal of this GWAS study is to see if the pairings of alleles at certain positions have some effect on the trait.
+
+
+|   person-id | allele-1        | allele-2  | trait |
+|-------------|----------------|-------------| ----|
+| 10005      | A              | A             | 60 | 
+| 10006       | A             | G            |  67  |
+| 10007       | G             | A             | 68  |
+| 10008       | A             | A             | 62  |
+
+To set up a simple linear regression model to predict our trait with the data we have in this table, it might look something like the below model. In the model, GG is the comparison group.
+$$
+\begin{align}
+\text{height } \thicksim \beta_0 + \beta_1 \text{AA} + \beta_2 \text{AG}
+\end{align}
+$$
+
+  We are able to use this model as our data has more rows than columns, or SNPs. But what happens when we have a data set where there are more columns than there are rows $(p>n)$?
+
+  The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The "study" we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
