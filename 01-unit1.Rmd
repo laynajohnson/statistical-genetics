@@ -3,7 +3,7 @@
 
 ### Some Vocabulary {-}
 
-There are many terms that come along with talking about genetic data. The following are some more biology related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.
+There are many terms that come along with talking about genetic data. The following are some more biology (genetics) related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.
 
 -   [*SNPs (single nucleotide polymorphisms)*]{.underline}: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population
 
@@ -43,22 +43,24 @@ knitr::include_graphics("chromosome-dna.png")
 
 \
 
-These next two drawings show how the segments of DNA creates an individual's genes and the nucleotides and alleles inside. So, within each long strand of DNA wrapped into the chromosome, there are segments that give us certain traits. These are called genes. The DNA and their genes are made up of four different nucleotide base pairs in between the sugar-phosphate backbone of the DNA (the outside lines). The four nucleotide bases are: adenine (A), thymine (T), cytosine (C), and guanine (G). In the vocab section, I mentioned that these are called alleles and they have specific pairings. A will always be with T just as C will always be with G. 
+These next two drawings show how the segments of DNA creates an individual's genes and the nucleotides and alleles inside that create a genetic variant. So, within each long strand of DNA wrapped into the chromosome, there are segments that give us certain traits. These are called genes. The DNA and their genes are made up of four different nucleotide base pairs in between the sugar-phosphate backbone of the DNA (the outside lines). The four nucleotide bases are: adenine (A), thymine (T), cytosine (C), and guanine (G). In the vocab section, I mentioned that these are called alleles and they have specific pairings. A will always be with T just as C will always be with G. 
+
+We can see in these visualizations that we can zoom into some segement of DNA and see a *SNV* where there are two possible alleles. This is called *biallelic*. 
 
 
-```{r, fig.cap="*Some gene segment from DNA sequence (left) and Alleles in some gene (right)*", out.width="50%", fig.show="hold", echo=FALSE}
+```{r, fig.cap="*Some gene segment from DNA sequence (left) and genetic variant (right)*", out.width="50%", fig.show="hold", echo=FALSE}
 knitr::include_graphics("dna-gene.png")
-knitr::include_graphics("alleles.png")
+knitr::include_graphics("dna-genetic-variant.png")
 
 ```
 
 \
 
-Now that we can better understand some genomic structures, let's get back into GWAS
+Now that we can better understand some genomic structures, let's get back into explaining GWAS.
 
 ### A small example
 
-  Below is an example of a small study of alleles that can be different at some place along the DNA sequence. The goal of this GWAS study is to see if the pairings of alleles at certain positions have some effect on the trait. We know from before that A and T pair as well as C and G. This means we really only need to list one nucleotide base in our data given the other is known.
+  Below is an example of a small study of alleles that can be different at some place along the DNA sequence. We can call this a biallelic genetic variant. The goal of this GWAS study is to see if the pairings of alleles at certain positions have some effect on the trait. We know from before that A and T pair as well as C and G. This means we really only need to list one nucleotide base in our data given the other is known.
 
 
 |   person ID | parent 1 allele        | parent 2 allele  | trait |
@@ -82,23 +84,107 @@ Instead of having this more complex table, if we know G is the minor allele in t
 The typical GWAS model looks like this. Think about what would go into the variables below from our small example. 
 
 $$
-E[Y \mid X] = \beta_0 + \beta_1 X
+E[y \mid x] = \beta_0 + \beta_1 x
 $$
 
-  We are able to use this model easily as our data has only one position of interest, or SNP. But what happens when we have a data set where there are more columns than there are rows $(p>n)$?
+  We are able to use this model easily as our data has only one position of interest, or SNP. But what happens when we have a data set where there are more columns than there are rows, $(p>n)$?
 
   The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The "study" we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?
   
 ## Simulating a GWAS
 
+Using the `rbinom` function, we can randomly generate data from a binomial distribution. We choose a size of $n = 100$ people and a probability of having the minor allele as $p = 0.1$. The last argument in the function tells us the number of trials, or in this case, each person is randomly assigned to have either 0, 1, or 2 minor alleles.
+
+```{r}
+set.seed(494) # for reproducible random number generation
+snp <- rbinom(n = 100, size = 2, p = 0.1) # 100 people, MAF = 0.1
+print(snp)
+```
 
 
+We know from before that we actually would see way more than just one genetic variant for $n$ number of people. So, we can extend the above `rbinom` function into our own function in which we can choose the number of genetic variants to simulate per person
 
 
+```{r}
+#| cache: true
+
+# function doing the same as the one before, where we get to choose the number of people in the study and the minor allele frequency (MAF)
+do_one <- function(n_ppl, MAF){
+  snp <- rbinom(n = n_ppl, size = 2, p = MAF)
+  return(snp)
+}
+
+# combining the previous function with the `replicate` function to replicate 1000 times to create 1000 variants
+set.seed(494)
+snps <- replicate(1000, do_one(n_ppl = 100, MAF = 0.1))
+
+```
 
 
+This new `snps` object has 100 people each with 1000 variants. We can use the functions `nrow` and `ncol` to see that data is $(p>n)$.
+
+```{r}
+nrow(snps)
+ncol(snps)
+```
 
 
+Now, we can create some numeric trait using the `rnorm` function and combine the data with our SNPs from before using `cbind`.
+
+```{r}
+set.seed(494) # set seed for reproducibility
+y <- rnorm(100, mean = 65, sd = 3) # generate trait
+print(y)
+
+# creating a single data frame for snps and trait
+dat <- as.data.frame(cbind(y, snps))
+```
+
+\
+\
+
+### Marginal Regression
+
+For the extent of this text, we will not be performing an actual GWAS study with real data. However, we will explain the idea of *marginal regression* and what it has to do with data that is $(p>n)$.
+
+\
+
+With our simulation in the last section, if we were to try to fit a multiple linear regression model with the data we would get NA values for many of the coefficients. *We cannot estimate more coefficients than we have observations*. For our simulation this means that we cannot fit this model as there are 100 observations (people) and 1000 variants (coefficients).
+
+**Marginal regression** is a technique of dealing with $(p>n)$ data. We can fit individual models for each variant and check which are significantly related with our trait of interest. 
+
+$$
+\begin{align}
+E[y \mid x_j] = \beta_0 + \beta_{1j} x_j, \qquad y &= \text{trait of interest}\\
+x_j &= \text{number of minor alleles at position }j
+\end{align}
+$$
+
+The model above represents what one marginal regression model looks like. We would repeatedly fit a model like this for all positions $j = 1, 2, \dots m$. To find out if our SNPs are associated with our trait of interest, we also perform hypothesis testing for each model.
+
+For each model, our null hypothesis, $H_0$, is that there is no relationship between the genetic variant and our trait of interest. This means the alternative, $H_A$, is that there is a relationship present. 
+
+Using our example from before, say we fit 1000 models and perform 1000 hypothesis tests. When performing just one test, we would typically use a significance threshold of $\alpha = 0.05$, or, $p<0.05$. As a reminder, we choose a value for $\alpha$ based on how "comfortable" we are with making a type 1 error. A type 1 error happens when we reject $H_0$ and say there is a relationship between the SNP and trait of interest. 
+
+If we only conduct one hypothesis test, this means the probability of making a type 1 error is $P(\text{T1E}) = 0.05$. As we increase the number of tests, the probability of making at least one type 1 error increases. But we are not actually comfortable with concluding there is a relationship when there is truly not one so many times. This is the idea of multiple testing. There are many ways to adjust for this by making our significance threshold smaller. 
+
+### Multiple testing
+
+One way to adjust for multiple testing is to use the *Bonferroni Correction*. Say we still want the probability of at least one type 1 error at less than 5% with the 1000 tests we would have to perform with our simulation data. We can find this significance threshold by dividing the probability by the number of hypothesis tests we performed.
+
+This makes the significance threshold pretty small ($5 * 10^{-5}$). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. $5 * 10^{-11}$). However, this might be too conservative and lead us to make type 2 errors. 
+
+We could also adjust for multiple testing by using a *simulation-based approach*. This solution is way more computationally expensive than a Bonferroni Correction. Steps to this process can look something like this:
+
+1. Simulate a null trait (i.e., a trait that is not associated with any of the SNPs)
+
+2. Run GWAS to test the association between this simulated null trait and each of the SNPs in our dataset. 
+
+3. Record the smallest p-value from this GWAS.
+
+4. Repeat steps 1–3 many (e.g., 100, 1000) times.
+
+5. Look at the p-values you saved from those simulation replicates. Sort them from smallest to largest and find the lowest 5th percentile (i.e., the point at which 5% of the p-values are smaller than that number). 
 
 
 

@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-02-17" />
+<meta name="date" content="2025-02-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,6 +54,70 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -85,7 +149,11 @@
 <li class="chapter" data-level="1.1.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#genome-breakdown"><i class="fa fa-check"></i><b>1.1.1</b> Genome Breakdown</a></li>
 <li class="chapter" data-level="1.1.2" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#a-small-example"><i class="fa fa-check"></i><b>1.1.2</b> A small example</a></li>
 </ul></li>
-<li class="chapter" data-level="1.2" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#simulating-a-gwas"><i class="fa fa-check"></i><b>1.2</b> Simulating a GWAS</a></li>
+<li class="chapter" data-level="1.2" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#simulating-a-gwas"><i class="fa fa-check"></i><b>1.2</b> Simulating a GWAS</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#marginal-regression"><i class="fa fa-check"></i><b>1.2.1</b> Marginal Regression</a></li>
+<li class="chapter" data-level="1.2.2" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#multiple-testing"><i class="fa fa-check"></i><b>1.2.2</b> Multiple testing</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html"><i class="fa fa-check"></i><b>2</b> Genetic Ancestry</a></li>
 <li class="divider"></li>
@@ -112,7 +180,7 @@
 <h1><span class="header-section-number"> 1</span> Genome-Wide Association Studies (GWAS)<a href="genome-wide-association-studies-gwas.html#genome-wide-association-studies-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="some-vocabulary" class="section level3 unnumbered hasAnchor">
 <h3>Some Vocabulary<a href="genome-wide-association-studies-gwas.html#some-vocabulary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>There are many terms that come along with talking about genetic data. The following are some more biology related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.</p>
+<p>There are many terms that come along with talking about genetic data. The following are some more biology (genetics) related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.</p>
 <ul>
 <li><p><u><em>SNPs (single nucleotide polymorphisms)</em></u>: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population</p>
 <ul>
@@ -146,20 +214,21 @@ Figure 1.1: <em>23 pairs of chromosomes from parents (left) and Chromosome unwou
 </div>
 <p><br />
 </p>
-<p>These next two drawings show how the segments of DNA creates an individual’s genes and the nucleotides and alleles inside. So, within each long strand of DNA wrapped into the chromosome, there are segments that give us certain traits. These are called genes. The DNA and their genes are made up of four different nucleotide base pairs in between the sugar-phosphate backbone of the DNA (the outside lines). The four nucleotide bases are: adenine (A), thymine (T), cytosine (C), and guanine (G). In the vocab section, I mentioned that these are called alleles and they have specific pairings. A will always be with T just as C will always be with G.</p>
+<p>These next two drawings show how the segments of DNA creates an individual’s genes and the nucleotides and alleles inside that create a genetic variant. So, within each long strand of DNA wrapped into the chromosome, there are segments that give us certain traits. These are called genes. The DNA and their genes are made up of four different nucleotide base pairs in between the sugar-phosphate backbone of the DNA (the outside lines). The four nucleotide bases are: adenine (A), thymine (T), cytosine (C), and guanine (G). In the vocab section, I mentioned that these are called alleles and they have specific pairings. A will always be with T just as C will always be with G.</p>
+<p>We can see in these visualizations that we can zoom into some segement of DNA and see a <em>SNV</em> where there are two possible alleles. This is called <em>biallelic</em>.</p>
 <div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
-<img src="dna-gene.png" alt="*Some gene segment from DNA sequence (left) and Alleles in some gene (right)*" width="50%" /><img src="alleles.png" alt="*Some gene segment from DNA sequence (left) and Alleles in some gene (right)*" width="50%" />
+<img src="dna-gene.png" alt="*Some gene segment from DNA sequence (left) and genetic variant (right)*" width="50%" /><img src="dna-genetic-variant.png" alt="*Some gene segment from DNA sequence (left) and genetic variant (right)*" width="50%" />
 <p class="caption">
-Figure 1.2: <em>Some gene segment from DNA sequence (left) and Alleles in some gene (right)</em>
+Figure 1.2: <em>Some gene segment from DNA sequence (left) and genetic variant (right)</em>
 </p>
 </div>
 <p><br />
 </p>
-<p>Now that we can better understand some genomic structures, let’s get back into GWAS</p>
+<p>Now that we can better understand some genomic structures, let’s get back into explaining GWAS.</p>
 </div>
 <div id="a-small-example" class="section level3 hasAnchor" number="1.1.2">
 <h3><span class="header-section-number">1.1.2</span> A small example<a href="genome-wide-association-studies-gwas.html#a-small-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Below is an example of a small study of alleles that can be different at some place along the DNA sequence. The goal of this GWAS study is to see if the pairings of alleles at certain positions have some effect on the trait. We know from before that A and T pair as well as C and G. This means we really only need to list one nucleotide base in our data given the other is known.</p>
+<p>Below is an example of a small study of alleles that can be different at some place along the DNA sequence. We can call this a biallelic genetic variant. The goal of this GWAS study is to see if the pairings of alleles at certain positions have some effect on the trait. We know from before that A and T pair as well as C and G. This means we really only need to list one nucleotide base in our data given the other is known.</p>
 <table>
 <thead>
 <tr class="header">
@@ -230,15 +299,90 @@ Figure 1.2: <em>Some gene segment from DNA sequence (left) and Alleles in some g
 </table>
 <p>The typical GWAS model looks like this. Think about what would go into the variables below from our small example.</p>
 <p><span class="math display">\[
-E[Y \mid X] = \beta_0 + \beta_1 X
+E[y \mid x] = \beta_0 + \beta_1 x
 \]</span></p>
-<p>We are able to use this model easily as our data has only one position of interest, or SNP. But what happens when we have a data set where there are more columns than there are rows <span class="math inline">\((p&gt;n)\)</span>?</p>
+<p>We are able to use this model easily as our data has only one position of interest, or SNP. But what happens when we have a data set where there are more columns than there are rows, <span class="math inline">\((p&gt;n)\)</span>?</p>
 <p>The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The “study” we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?</p>
 </div>
 </div>
 <div id="simulating-a-gwas" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Simulating a GWAS<a href="genome-wide-association-studies-gwas.html#simulating-a-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using the <code>rbinom</code> function, we can randomly generate data from a binomial distribution. We choose a size of <span class="math inline">\(n = 100\)</span> people and a probability of having the minor allele as <span class="math inline">\(p = 0.1\)</span>. The last argument in the function tells us the number of trials, or in this case, each person is randomly assigned to have either 0, 1, or 2 minor alleles.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="genome-wide-association-studies-gwas.html#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>) <span class="co"># for reproducible random number generation</span></span>
+<span id="cb1-2"><a href="genome-wide-association-studies-gwas.html#cb1-2" tabindex="-1"></a>snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> <span class="fl">0.1</span>) <span class="co"># 100 people, MAF = 0.1</span></span>
+<span id="cb1-3"><a href="genome-wide-association-studies-gwas.html#cb1-3" tabindex="-1"></a><span class="fu">print</span>(snp)</span></code></pre></div>
+<pre><code>##   [1] 0 0 0 0 0 0 0 0 1 1 0 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##  [38] 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0
+##  [75] 0 2 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0</code></pre>
+<p>We know from before that we actually would see way more than just one genetic variant for <span class="math inline">\(n\)</span> number of people. So, we can extend the above <code>rbinom</code> function into our own function in which we can choose the number of genetic variants to simulate per person</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="genome-wide-association-studies-gwas.html#cb3-1" tabindex="-1"></a><span class="co"># function doing the same as the one before, where we get to choose the number of people in the study and the minor allele frequency (MAF)</span></span>
+<span id="cb3-2"><a href="genome-wide-association-studies-gwas.html#cb3-2" tabindex="-1"></a>do_one <span class="ot">&lt;-</span> <span class="cf">function</span>(n_ppl, MAF){</span>
+<span id="cb3-3"><a href="genome-wide-association-studies-gwas.html#cb3-3" tabindex="-1"></a>  snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n_ppl, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> MAF)</span>
+<span id="cb3-4"><a href="genome-wide-association-studies-gwas.html#cb3-4" tabindex="-1"></a>  <span class="fu">return</span>(snp)</span>
+<span id="cb3-5"><a href="genome-wide-association-studies-gwas.html#cb3-5" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="genome-wide-association-studies-gwas.html#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="genome-wide-association-studies-gwas.html#cb3-7" tabindex="-1"></a><span class="co"># combining the previous function with the `replicate` function to replicate 1000 times to create 1000 variants</span></span>
+<span id="cb3-8"><a href="genome-wide-association-studies-gwas.html#cb3-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>)</span>
+<span id="cb3-9"><a href="genome-wide-association-studies-gwas.html#cb3-9" tabindex="-1"></a>snps <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">do_one</span>(<span class="at">n_ppl =</span> <span class="dv">100</span>, <span class="at">MAF =</span> <span class="fl">0.1</span>))</span></code></pre></div>
+<p>This new <code>snps</code> object has 100 people each with 1000 variants. We can use the functions <code>nrow</code> and <code>ncol</code> to see that data is <span class="math inline">\((p&gt;n)\)</span>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="genome-wide-association-studies-gwas.html#cb4-1" tabindex="-1"></a><span class="fu">nrow</span>(snps)</span></code></pre></div>
+<pre><code>## [1] 100</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="genome-wide-association-studies-gwas.html#cb6-1" tabindex="-1"></a><span class="fu">ncol</span>(snps)</span></code></pre></div>
+<pre><code>## [1] 1000</code></pre>
+<p>Now, we can create some numeric trait using the <code>rnorm</code> function and combine the data with our SNPs from before using <code>cbind</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="genome-wide-association-studies-gwas.html#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>) <span class="co"># set seed for reproducibility</span></span>
+<span id="cb8-2"><a href="genome-wide-association-studies-gwas.html#cb8-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">65</span>, <span class="at">sd =</span> <span class="dv">3</span>) <span class="co"># generate trait</span></span>
+<span id="cb8-3"><a href="genome-wide-association-studies-gwas.html#cb8-3" tabindex="-1"></a><span class="fu">print</span>(y)</span></code></pre></div>
+<pre><code>##   [1] 59.62481 63.88034 63.02679 62.50892 70.83525 67.50514 63.61816 69.64214
+##   [9] 64.97347 65.47989 63.13887 63.07716 63.74931 64.70136 65.07071 58.33367
+##  [17] 61.91952 64.85250 65.66969 62.40541 62.04025 61.84794 64.28388 65.04385
+##  [25] 61.42188 62.55285 59.29327 67.46579 61.65637 67.67236 66.09086 70.02120
+##  [33] 68.01750 60.73839 58.42093 67.99430 65.89968 64.39152 65.65709 66.54789
+##  [41] 65.00309 65.34142 63.41219 68.68026 61.68235 61.18094 68.73800 69.94243
+##  [49] 66.55700 60.87955 66.43440 56.08365 69.62706 68.09680 68.85878 64.92834
+##  [57] 63.05479 65.98005 64.87043 64.69823 65.76869 67.50849 65.20761 62.59497
+##  [65] 68.12195 67.62197 66.63407 66.00194 62.77750 63.89318 63.51581 71.79953
+##  [73] 65.50906 68.08233 68.99696 64.76795 69.99623 66.88639 65.01119 65.69350
+##  [81] 64.53200 64.69204 65.19411 64.11513 63.19411 62.63277 62.99986 64.56554
+##  [89] 67.31328 62.24985 65.15231 61.25394 67.23057 65.94068 64.43938 69.38935
+##  [97] 66.89983 65.07994 63.90870 60.93687</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="genome-wide-association-studies-gwas.html#cb10-1" tabindex="-1"></a><span class="co"># creating a single data frame for snps and trait</span></span>
+<span id="cb10-2"><a href="genome-wide-association-studies-gwas.html#cb10-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(y, snps))</span></code></pre></div>
+<p><br />
+<br />
+</p>
+<div id="marginal-regression" class="section level3 hasAnchor" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> Marginal Regression<a href="genome-wide-association-studies-gwas.html#marginal-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For the extent of this text, we will not be performing an actual GWAS study with real data. However, we will explain the idea of <em>marginal regression</em> and what it has to do with data that is <span class="math inline">\((p&gt;n)\)</span>.</p>
+<p><br />
+</p>
+<p>With our simulation in the last section, if we were to try to fit a multiple linear regression model with the data we would get NA values for many of the coefficients. <em>We cannot estimate more coefficients than we have observations</em>. For our simulation this means that we cannot fit this model as there are 100 observations (people) and 1000 variants (coefficients).</p>
+<p><strong>Marginal regression</strong> is a technique of dealing with <span class="math inline">\((p&gt;n)\)</span> data. We can fit individual models for each variant and check which are significantly related with our trait of interest.</p>
+<p><span class="math display">\[
+\begin{align}
+E[y \mid x_j] = \beta_0 + \beta_{1j} x_j, \qquad y &amp;= \text{trait of interest}\\
+x_j &amp;= \text{number of minor alleles at position }j
+\end{align}
+\]</span></p>
+<p>The model above represents what one marginal regression model looks like. We would repeatedly fit a model like this for all positions <span class="math inline">\(j = 1, 2, \dots m\)</span>. To find out if our SNPs are associated with our trait of interest, we also perform hypothesis testing for each model.</p>
+<p>For each model, our null hypothesis, <span class="math inline">\(H_0\)</span>, is that there is no relationship between the genetic variant and our trait of interest. This means the alternative, <span class="math inline">\(H_A\)</span>, is that there is a relationship present.</p>
+<p>Using our example from before, say we fit 1000 models and perform 1000 hypothesis tests. When performing just one test, we would typically use a significance threshold of <span class="math inline">\(\alpha = 0.05\)</span>, or, <span class="math inline">\(p&lt;0.05\)</span>. As a reminder, we choose a value for <span class="math inline">\(\alpha\)</span> based on how “comfortable” we are with making a type 1 error. A type 1 error happens when we reject <span class="math inline">\(H_0\)</span> and say there is a relationship between the SNP and trait of interest.</p>
+<p>If we only conduct one hypothesis test, this means the probability of making a type 1 error is <span class="math inline">\(P(\text{T1E}) = 0.05\)</span>. As we increase the number of tests, the probability of making at least one type 1 error increases. But we are not actually comfortable with concluding there is a relationship when there is truly not one so many times. This is the idea of multiple testing. There are many ways to adjust for this by making our significance threshold smaller.</p>
+</div>
+<div id="multiple-testing" class="section level3 hasAnchor" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> Multiple testing<a href="genome-wide-association-studies-gwas.html#multiple-testing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One way to adjust for multiple testing is to use the <em>Bonferroni Correction</em>. Say we still want the probability of at least one type 1 error at less than 5% with the 1000 tests we would have to perform with our simulation data. We can find this significance threshold by dividing the probability by the number of hypothesis tests we performed.</p>
+<p>This makes the significance threshold pretty small (<span class="math inline">\(5 * 10^{-5}\)</span>). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. <span class="math inline">\(5 * 10^{-11}\)</span>). However, this might be too conservative and lead us to make type 2 errors.</p>
+<p>We could also adjust for multiple testing by using a <em>simulation-based approach</em>. This solution is way more computationally expensive than a Bonferroni Correction. Steps to this process can look something like this:</p>
+<ol style="list-style-type: decimal">
+<li><p>Simulate a null trait (i.e., a trait that is not associated with any of the SNPs)</p></li>
+<li><p>Run GWAS to test the association between this simulated null trait and each of the SNPs in our dataset.</p></li>
+<li><p>Record the smallest p-value from this GWAS.</p></li>
+<li><p>Repeat steps 1–3 many (e.g., 100, 1000) times.</p></li>
+<li><p>Look at the p-values you saved from those simulation replicates. Sort them from smallest to largest and find the lowest 5th percentile (i.e., the point at which 5% of the p-values are smaller than that number).</p></li>
+</ol>
 
+</div>
 </div>
 </div>
             </section>
