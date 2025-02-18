@@ -2,3 +2,9 @@ genome-wide-association-studies-gwas
 introduction-to-gwas
 simulating-a-gwas
 genetic-ancestry
+genome-breakdown
+a-small-example
+fig:unnamed-chunk-1
+fig:unnamed-chunk-2
+fig:unnamed-chunk-3
+fig:unnamed-chunk-4
