@@ -140,10 +140,12 @@ print(y)
 dat <- as.data.frame(cbind(y, snps))
 ```
 
+With our SNPs and trait data together, we can perform a simulated GWAS study. But, we need another tool to help us solve this $(p>n)$ problem that occurs from trying to use one giant regression model. This will be explained next. 
+
 \
 \
 
-### Marginal Regression
+## Marginal Regression
 
 For the extent of this text, we will not be performing an actual GWAS study with real data. However, we will explain the idea of *marginal regression* and what it has to do with data that is $(p>n)$.
 
@@ -172,7 +174,7 @@ If we only conduct one hypothesis test, this means the probability of making a t
 
 One way to adjust for multiple testing is to use the *Bonferroni Correction*. Say we still want the probability of at least one type 1 error at less than 5% with the 1000 tests we would have to perform with our simulation data. We can find this significance threshold by dividing the probability by the number of hypothesis tests we performed.
 
-This makes the significance threshold pretty small ($5 * 10^{-5}$). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. $5 * 10^{-11}$). However, this might be too conservative and lead us to make type 2 errors. 
+This makes the significance threshold pretty small ($5 \ast 10^{-5}$). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. $5 \ast 10^{-11}$). However, this might be too conservative and lead us to make type 2 errors. 
 
 We could also adjust for multiple testing by using a *simulation-based approach*. This solution is way more computationally expensive than a Bonferroni Correction. Steps to this process can look something like this:
 
@@ -186,13 +188,30 @@ We could also adjust for multiple testing by using a *simulation-based approach*
 
 5. Look at the p-values you saved from those simulation replicates. Sort them from smallest to largest and find the lowest 5th percentile (i.e., the point at which 5% of the p-values are smaller than that number). 
 
+The positives of this approach is that our p-value threshold will most likely be less conservative than if we used the Bonferroni Correction instead. 
+
+## Visualizing GWAS
+
+Since our studies may have many many SNPs to test significance for, it can be hard to visualize. If we just take and plot our p-values vs each SNP's position in a scatter plot, it won't look very nice. There are too many values crowing around each other. Visualizing data always helps, and there is a fix for this issue. 
+
+We can create a *Manhattan Plot* with the `manhattan()` function in the `qqman` package to visualize our significance results. Below is an image of an example Manhattan plot to give an idea of what our p-values look like for each SNP. 
+
+```{r, fig.cap="*Manhattan plot example*", out.width="70%", echo=FALSE}
+knitr::include_graphics("man-plot.png")
+```
+
+\
+
+Another type of visualization we can use as a diagnostic tool are called QQ plots. These plots allow us to compare the results from our study to what we would see if no SNPs were associated with our disease of interest. We would expect that not all of the SNPs in our study are associated with the trait, so most should fall on the $y = x$ line. If there are some SNPs that we find are associated with the trait of interest, we would visually see some points above the diagonal $y = x$. 
+
+```{r, fig.cap="*QQ plot example*", out.width="50%", echo=FALSE}
+knitr::include_graphics("qq-plot.png")
+```
 
 
+## Wrapping up {-}
 
-
-
-
-
+With that, we have come to the end of this chapter on genome-wide association studies (GWAS). You now have many of the concepts you need to understand this methodology and attempt to perform some studies yourself.
 
 
 
