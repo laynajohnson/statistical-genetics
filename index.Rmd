@@ -5,12 +5,13 @@ date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
 
-  
-```{r, fig.cap="*Genetics Image*", out.width="50%", fig.show="hold", echo=FALSE}
-knitr::include_graphics("cover-image.png")
-```
 
 # Introduction {-}
+
+  
+```{r, out.width="100%", echo=FALSE}
+knitr::include_graphics("cover-image.png")
+```
 
 In the following chapters, you will find concepts and examples related to statistical genetics explained. This breakdown is more directed towards those who are familiar with RStudio coding and statistical concepts, but who may not be as familiar with genetics or biology. You will learn different terms and methodologies in statistical genetics.
 
