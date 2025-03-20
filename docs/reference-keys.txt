@@ -11,3 +11,7 @@ marginal-regression
 multiple-testing
 visualizing-gwas
 genetic-ancestry
+describing-human-populations
+population-admixture
+principal-component-analysis
+omitted-variable-bias

@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-02-18" />
+<meta name="date" content="2025-03-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -304,6 +304,7 @@ Figure 1.2: <em>Some gene segment from DNA sequence (left) and genetic variant (
 E[y \mid x] = \beta_0 + \beta_1 x
 \]</span></p>
 <p>We are able to use this model easily as our data has only one position of interest, or SNP. But what happens when we have a data set where there are more columns than there are rows, <span class="math inline">\((p&gt;n)\)</span>?</p>
+<p>The answer here is that we run into an issue of <em>big data</em>. We must have the same or more observations as we do coefficients in order to effectively run a regression model. When we have too many coefficients and not a sufficient number of observations, we will get NA values.</p>
 <p>The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The “study” we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?</p>
 </div>
 </div>
@@ -313,13 +314,9 @@ E[y \mid x] = \beta_0 + \beta_1 x
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="genome-wide-association-studies-gwas.html#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>) <span class="co"># for reproducible random number generation</span></span>
 <span id="cb1-2"><a href="genome-wide-association-studies-gwas.html#cb1-2" tabindex="-1"></a>snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> <span class="fl">0.1</span>) <span class="co"># 100 people, MAF = 0.1</span></span>
 <span id="cb1-3"><a href="genome-wide-association-studies-gwas.html#cb1-3" tabindex="-1"></a><span class="fu">print</span>(snp)</span></code></pre></div>
-<pre><code>##   [1] 0 0 0 0 0 0 0 0 1 1 0 1 0 1 1
-##  [16] 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-##  [31] 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0
-##  [46] 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
-##  [61] 0 0 1 0 1 1 0 0 0 0 1 0 0 0 0
-##  [76] 2 0 0 0 0 0 0 0 1 0 0 1 0 0 0
-##  [91] 0 0 1 0 1 0 0 0 0 0</code></pre>
+<pre><code>##   [1] 0 0 0 0 0 0 0 0 1 1 0 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##  [38] 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0
+##  [75] 0 2 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0</code></pre>
 <p>We know from before that we actually would see way more than just one genetic variant for <span class="math inline">\(n\)</span> number of people. So, we can extend the above <code>rbinom</code> function into our own function in which we can choose the number of genetic variants to simulate per person</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="genome-wide-association-studies-gwas.html#cb3-1" tabindex="-1"></a><span class="co"># function doing the same as the one before, where we get to choose the number of people in the study and the minor allele frequency (MAF)</span></span>
 <span id="cb3-2"><a href="genome-wide-association-studies-gwas.html#cb3-2" tabindex="-1"></a>do_one <span class="ot">&lt;-</span> <span class="cf">function</span>(n_ppl, MAF){</span>
@@ -339,40 +336,19 @@ E[y \mid x] = \beta_0 + \beta_1 x
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="genome-wide-association-studies-gwas.html#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>) <span class="co"># set seed for reproducibility</span></span>
 <span id="cb8-2"><a href="genome-wide-association-studies-gwas.html#cb8-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">65</span>, <span class="at">sd =</span> <span class="dv">3</span>) <span class="co"># generate trait</span></span>
 <span id="cb8-3"><a href="genome-wide-association-studies-gwas.html#cb8-3" tabindex="-1"></a><span class="fu">print</span>(y)</span></code></pre></div>
-<pre><code>##   [1] 59.62481 63.88034 63.02679
-##   [4] 62.50892 70.83525 67.50514
-##   [7] 63.61816 69.64214 64.97347
-##  [10] 65.47989 63.13887 63.07716
-##  [13] 63.74931 64.70136 65.07071
-##  [16] 58.33367 61.91952 64.85250
-##  [19] 65.66969 62.40541 62.04025
-##  [22] 61.84794 64.28388 65.04385
-##  [25] 61.42188 62.55285 59.29327
-##  [28] 67.46579 61.65637 67.67236
-##  [31] 66.09086 70.02120 68.01750
-##  [34] 60.73839 58.42093 67.99430
-##  [37] 65.89968 64.39152 65.65709
-##  [40] 66.54789 65.00309 65.34142
-##  [43] 63.41219 68.68026 61.68235
-##  [46] 61.18094 68.73800 69.94243
-##  [49] 66.55700 60.87955 66.43440
-##  [52] 56.08365 69.62706 68.09680
-##  [55] 68.85878 64.92834 63.05479
-##  [58] 65.98005 64.87043 64.69823
-##  [61] 65.76869 67.50849 65.20761
-##  [64] 62.59497 68.12195 67.62197
-##  [67] 66.63407 66.00194 62.77750
-##  [70] 63.89318 63.51581 71.79953
-##  [73] 65.50906 68.08233 68.99696
-##  [76] 64.76795 69.99623 66.88639
-##  [79] 65.01119 65.69350 64.53200
-##  [82] 64.69204 65.19411 64.11513
-##  [85] 63.19411 62.63277 62.99986
-##  [88] 64.56554 67.31328 62.24985
-##  [91] 65.15231 61.25394 67.23057
-##  [94] 65.94068 64.43938 69.38935
-##  [97] 66.89983 65.07994 63.90870
-## [100] 60.93687</code></pre>
+<pre><code>##   [1] 59.62481 63.88034 63.02679 62.50892 70.83525 67.50514 63.61816 69.64214
+##   [9] 64.97347 65.47989 63.13887 63.07716 63.74931 64.70136 65.07071 58.33367
+##  [17] 61.91952 64.85250 65.66969 62.40541 62.04025 61.84794 64.28388 65.04385
+##  [25] 61.42188 62.55285 59.29327 67.46579 61.65637 67.67236 66.09086 70.02120
+##  [33] 68.01750 60.73839 58.42093 67.99430 65.89968 64.39152 65.65709 66.54789
+##  [41] 65.00309 65.34142 63.41219 68.68026 61.68235 61.18094 68.73800 69.94243
+##  [49] 66.55700 60.87955 66.43440 56.08365 69.62706 68.09680 68.85878 64.92834
+##  [57] 63.05479 65.98005 64.87043 64.69823 65.76869 67.50849 65.20761 62.59497
+##  [65] 68.12195 67.62197 66.63407 66.00194 62.77750 63.89318 63.51581 71.79953
+##  [73] 65.50906 68.08233 68.99696 64.76795 69.99623 66.88639 65.01119 65.69350
+##  [81] 64.53200 64.69204 65.19411 64.11513 63.19411 62.63277 62.99986 64.56554
+##  [89] 67.31328 62.24985 65.15231 61.25394 67.23057 65.94068 64.43938 69.38935
+##  [97] 66.89983 65.07994 63.90870 60.93687</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="genome-wide-association-studies-gwas.html#cb10-1" tabindex="-1"></a><span class="co"># creating a single data frame for snps and trait</span></span>
 <span id="cb10-2"><a href="genome-wide-association-studies-gwas.html#cb10-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(y, snps))</span></code></pre></div>
 <p>With our SNPs and trait data together, we can perform a simulated GWAS study. But, we need another tool to help us solve this <span class="math inline">\((p&gt;n)\)</span> problem that occurs from trying to use one giant regression model. This will be explained next.</p>
@@ -400,7 +376,7 @@ x_j &amp;= \text{number of minor alleles at position }j
 <div id="multiple-testing" class="section level3 hasAnchor" number="1.3.1">
 <h3><span class="header-section-number">1.3.1</span> Multiple testing<a href="genome-wide-association-studies-gwas.html#multiple-testing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One way to adjust for multiple testing is to use the <em>Bonferroni Correction</em>. Say we still want the probability of at least one type 1 error at less than 5% with the 1000 tests we would have to perform with our simulation data. We can find this significance threshold by dividing the probability by the number of hypothesis tests we performed.</p>
-<p>This makes the significance threshold pretty small (<span class="math inline">\(5 \ast 10^{-5}\)</span>). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. <span class="math inline">\(5 \ast 10^{-11}\)</span>). However, this might be too conservative and lead us to make type 2 errors.</p>
+<p>This makes the significance threshold pretty small (<span class="math inline">\(5 \ast 10^{-5}\)</span>). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. <span class="math inline">\(5 \ast 10^{-11}\)</span>). However, this might be too conservative and lead us to make type 2 errors. This means that our threshold might actually be too small which could lead us to not reject the null when we should have (found no association where we should have).</p>
 <p>We could also adjust for multiple testing by using a <em>simulation-based approach</em>. This solution is way more computationally expensive than a Bonferroni Correction. Steps to this process can look something like this:</p>
 <ol style="list-style-type: decimal">
 <li><p>Simulate a null trait (i.e., a trait that is not associated with any of the SNPs)</p></li>

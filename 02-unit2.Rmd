@@ -1,1 +1,11 @@
 # Genetic Ancestry
+
+### Some Vocabulary {.unnumbered}
+
+## Describing Human Populations
+
+### Population Admixture
+
+## Principal Component Analysis
+
+## Omitted Variable Bias

@@ -88,6 +88,8 @@ E[y \mid x] = \beta_0 + \beta_1 x
 $$
 
   We are able to use this model easily as our data has only one position of interest, or SNP. But what happens when we have a data set where there are more columns than there are rows, $(p>n)$?
+  
+  The answer here is that we run into an issue of *big data*. We must have the same or more observations as we do coefficients in order to effectively run a regression model. When we have too many coefficients and not a sufficient number of observations, we will get NA values.
 
   The DNA sequence of a single person consists of an estimated 3 billion nucleotides. While a GWAS will not typically measure every single position, they can still be hundreds of thousands to billions of columns. The "study" we did above was a very reduced example of what a GWAS could look like. So, how can we estimate the effect of some genetic variant on our trait of interest if we cannot use one giant regression model?
   
@@ -174,7 +176,7 @@ If we only conduct one hypothesis test, this means the probability of making a t
 
 One way to adjust for multiple testing is to use the *Bonferroni Correction*. Say we still want the probability of at least one type 1 error at less than 5% with the 1000 tests we would have to perform with our simulation data. We can find this significance threshold by dividing the probability by the number of hypothesis tests we performed.
 
-This makes the significance threshold pretty small ($5 \ast 10^{-5}$). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. $5 \ast 10^{-11}$). However, this might be too conservative and lead us to make type 2 errors. 
+This makes the significance threshold pretty small ($5 \ast 10^{-5}$). But a typical GWAS will involve hundreds of thousands or even billions of SNPs. So our threshold can get pretty tiny for this many hypothesis tests (e.g. $5 \ast 10^{-11}$). However, this might be too conservative and lead us to make type 2 errors. This means that our threshold might actually be too small which could lead us to not reject the null when we should have (found no association where we should have).
 
 We could also adjust for multiple testing by using a *simulation-based approach*. This solution is way more computationally expensive than a Bonferroni Correction. Steps to this process can look something like this:
 
