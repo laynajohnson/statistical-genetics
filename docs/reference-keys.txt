@@ -1,7 +1,7 @@
-fig:unnamed-chunk-7
+fig:unnamed-chunk-2
+fig:unnamed-chunk-3
 fig:unnamed-chunk-8
-fig:unnamed-chunk-13
-fig:unnamed-chunk-14
+fig:unnamed-chunk-9
 genome-wide-association-studies-gwas
 introduction-to-gwas
 genome-breakdown

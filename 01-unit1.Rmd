@@ -1,7 +1,7 @@
 # Genome-Wide Association Studies (GWAS)
 
 
-### Some Vocabulary {-}
+### Terms {-}
 
 There are many terms that come along with talking about genetic data. The following are some more biology (genetics) related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.
 
