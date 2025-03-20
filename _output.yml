@@ -4,7 +4,7 @@ bookdown::gitbook:
     toc:
       collapse: section
       before: |
-        <li><a href="./"><img src="cover-image.png" alt="Logo" style="height: 24px;"></a></li>
+        <li><a href="./">Content Summary</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
       sharing:
