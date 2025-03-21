@@ -37,8 +37,8 @@ There are many terms that come along with talking about genetic data. The follow
 
   
 ```{r, fig.cap="*23 pairs of chromosomes from parents (left) and Chromosome unwound DNA (right)*", out.width="50%", fig.show="hold", echo=FALSE}
-knitr::include_graphics("chromosome-pair.png")
-knitr::include_graphics("chromosome-dna.png")
+knitr::include_graphics("images/chromosome-pair.png")
+knitr::include_graphics("images/chromosome-dna.png")
 ```
 
 \
@@ -49,8 +49,8 @@ We can see in these visualizations that we can zoom into some segement of DNA an
 
 
 ```{r, fig.cap="*Some gene segment from DNA sequence (left) and genetic variant (right)*", out.width="50%", fig.show="hold", echo=FALSE}
-knitr::include_graphics("dna-gene.png")
-knitr::include_graphics("dna-genetic-variant.png")
+knitr::include_graphics("images/dna-gene.png")
+knitr::include_graphics("images/dna-genetic-variant.png")
 
 ```
 
@@ -199,7 +199,7 @@ Since our studies may have many many SNPs to test significance for, it can be ha
 We can create a *Manhattan Plot* with the `manhattan()` function in the `qqman` package to visualize our significance results. Below is an image of an example Manhattan plot to give an idea of what our p-values look like for each SNP. 
 
 ```{r, fig.cap="*Manhattan plot example*", out.width="70%", echo=FALSE}
-knitr::include_graphics("man-plot.png")
+knitr::include_graphics("images/man-plot.png")
 ```
 
 \
@@ -207,7 +207,7 @@ knitr::include_graphics("man-plot.png")
 Another type of visualization we can use as a diagnostic tool are called QQ plots. These plots allow us to compare the results from our study to what we would see if no SNPs were associated with our disease of interest. We would expect that not all of the SNPs in our study are associated with the trait, so most should fall on the $y = x$ line. If there are some SNPs that we find are associated with the trait of interest, we would visually see some points above the diagonal $y = x$. 
 
 ```{r, fig.cap="*QQ plot example*", out.width="50%", echo=FALSE}
-knitr::include_graphics("qq-plot.png")
+knitr::include_graphics("images/qq-plot.png")
 ```
 
 
