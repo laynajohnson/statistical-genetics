@@ -164,7 +164,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#population-admixture"><i class="fa fa-check"></i><b>2.1.1</b> Population Admixture</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#principal-component-analysis"><i class="fa fa-check"></i><b>2.2</b> Principal Component Analysis</a></li>
-<li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3</b> Omitted Variable Bias</a></li>
+<li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#confounding-variables"><i class="fa fa-check"></i><b>2.3</b> Confounding Variables</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#glossary-1"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -204,6 +207,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div id="population-admixture" class="section level3 hasAnchor" number="2.1.1">
 <h3><span class="header-section-number">2.1.1</span> Population Admixture<a href="genetic-ancestry.html#population-admixture" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As our world has become so interconnected between geographies and people’s from long ago to the present, many of us have DNA inherited from multiple populations. The general term for this is <em>population admixture</em>.</p>
 <p><br />
 <br />
 </p>
@@ -211,14 +215,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="principal-component-analysis" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Principal Component Analysis<a href="genetic-ancestry.html#principal-component-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a dimension reduction method for correlated variables. We will be left with principal components (PC’s) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will group together the SNPs that contribute the most similarly to differences in population, effectively leaving us with less data overall.</p>
+<p>The first few PC’s explain the most variation in our data. Here is an example of what the PC’s we create from this method look like:</p>
+<p>$$ <span class="math display">\[\begin{align}
+\text{PC}_1 &amp; = a_{11}x_1 + a_{12}x_2 \dots \\
+\text{PC}_2 &amp; = a_{12}x_1 + a_{24}x_2 \dots \\
+\dots \\
+\text{PC}_n &amp; = a_{b}x_1 + a_cx_2 \dots
+\end{align}\]</span></p>
+<p>$$</p>
 <p><br />
 <br />
 </p>
 </div>
-<div id="omitted-variable-bias" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Omitted Variable Bias<a href="genetic-ancestry.html#omitted-variable-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="confounding-variables" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Confounding Variables<a href="genetic-ancestry.html#confounding-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="omitted-variable-bias" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Omitted Variable Bias<a href="genetic-ancestry.html#omitted-variable-bias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><br />
 </p>
+</div>
 </div>
 <div id="glossary-1" class="section level2 unnumbered hasAnchor">
 <h2>Glossary<a href="genetic-ancestry.html#glossary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -227,7 +243,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p><u><em>Pedigree</em></u>: how genealogical ancestors are related to each other, like an extensive family tree</p></li>
 <li><p><u><em>Genealogical ancestry</em></u>: the identifiable ancestors in your pedigree</p></li>
 <li><p><u><em>Genetic ancestry</em></u>: the paths through one’s pedigree by which genetic traits have been inherited</p></li>
-<li><p><u><em>Genetic similarity</em></u>: classifying genomes as similar to specific populations</p></li>
+<li><p><u><em>Genetic similarity</em></u>: classifying genomes as similar to specific populations</p>
+<ul>
+<li><u><em>Population admixture</em></u>: the mating of individuals with different geographical and continental origins</li>
+</ul></li>
+<li><p><u><em>Principal Component Analysis</em></u>:</p></li>
 </ul>
 
 </div>

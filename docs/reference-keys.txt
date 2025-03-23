@@ -1,7 +1,7 @@
+fig:unnamed-chunk-2
 fig:unnamed-chunk-3
-fig:unnamed-chunk-4
+fig:unnamed-chunk-8
 fig:unnamed-chunk-9
-fig:unnamed-chunk-10
 genome-wide-association-studies-gwas
 introduction-to-gwas
 genome-breakdown
@@ -14,4 +14,5 @@ genetic-ancestry
 describing-human-populations
 population-admixture
 principal-component-analysis
+confounding-variables
 omitted-variable-bias

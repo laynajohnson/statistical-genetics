@@ -10,17 +10,17 @@ The concept of different populations comes up a lot in these contexts. As with a
 
 ## Describing Human Populations
 
-When a researcher is working with genetic data, they will likely use some sort of population descriptor to attempt to capture complex differences in human genetics. 
+When a researcher is working with genetic data, they will likely use some sort of population descriptor to attempt to capture complex differences in human genetics.
 
 When you look at the results of your personal DNA test, you will likely see your ancestry broken down into smaller percentages of regions or peoples that contribute to 100% you. The way these regions are described brings with it some questions you may have never thought of before:
 
-- *How are regions defined? Are political borders used in every case?*
+-   *How are regions defined? Are political borders used in every case?*
 
-- *What is the genetic "line" between being reported as native to one area versus another geography close by? How specific can this get?*
-
-
+-   *What is the genetic "line" between being reported as native to one area versus another geography close by? How specific can this get?*
 
 ### Population Admixture
+
+As our world has become so interconnected between geographies and people's from long ago to the present, many of us have DNA inherited from multiple populations. The general term for this is *population admixture*.
 
 
 
@@ -29,19 +29,31 @@ When you look at the results of your personal DNA test, you will likely see your
 
 ## Principal Component Analysis
 
+If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a dimension reduction method for correlated variables. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will group together the SNPs that contribute the most similarly to differences in population, effectively leaving us with less data overall.
 
+The first few PC's explain the most variation in our data. Here is an example of what the PC's we create from this method look like:
+
+\$\$ \begin{align}
+\text{PC}_1 & = a_{11}x_1 + a_{12}x_2 \dots \\
+\text{PC}_2 & = a_{12}x_1 + a_{24}x_2 \dots \\
+\dots \\
+\text{PC}_n & = a_{b}x_1 + a_cx_2 \dots
+\end{align}
+
+\$\$
 
 \
 \
 
-## Omitted Variable Bias
+## Confounding Variables
 
 
+
+### Omitted Variable Bias
 
 \
 
-
-## Glossary {-}
+## Glossary {.unnumbered}
 
 Terms for this chapter and beyond.
 
@@ -52,3 +64,7 @@ Terms for this chapter and beyond.
 -   [*Genetic ancestry*]{.underline}: the paths through one's pedigree by which genetic traits have been inherited
 
 -   [*Genetic similarity*]{.underline}: classifying genomes as similar to specific populations
+
+    -   [*Population admixture*]{.underline}: the mating of individuals with different geographical and continental origins
+
+-   [*Principal Component Analysis*]{.underline}:

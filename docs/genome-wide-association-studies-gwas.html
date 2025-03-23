@@ -164,7 +164,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#population-admixture"><i class="fa fa-check"></i><b>2.1.1</b> Population Admixture</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#principal-component-analysis"><i class="fa fa-check"></i><b>2.2</b> Principal Component Analysis</a></li>
-<li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3</b> Omitted Variable Bias</a></li>
+<li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#confounding-variables"><i class="fa fa-check"></i><b>2.3</b> Confounding Variables</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#glossary-1"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
 <li class="divider"></li>
@@ -198,7 +201,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">1.1.1</span> Genome Breakdown<a href="genome-wide-association-studies-gwas.html#genome-breakdown" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Before getting too far into GWAS, let’s take a moment to dive into some of the science-y details. I created a series of images that break down some of the different vocabulary from above and how they are related.</p>
 <p>Most humans have 23 pairs of <em>chromosomes</em>. Within each pair, you have one chromosome given from each parent. The chromosome for parent 1 is made up of a mixture of DNA from both of that parent’s parents and likewise for the chromosome for parent 2. We can also see that each chromosome is actually just an X-ish shape of DNA all bundled up. When we “unwrap” it, we can see some more levels of terms to remember.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
 <img src="images/chromosome-pair.png" alt="*23 pairs of chromosomes from parents (left) and Chromosome unwound DNA (right)*" width="50%" /><img src="images/chromosome-dna.png" alt="*23 pairs of chromosomes from parents (left) and Chromosome unwound DNA (right)*" width="50%" />
 <p class="caption">
 Figure 1.1: <em>23 pairs of chromosomes from parents (left) and Chromosome unwound DNA (right)</em>
@@ -208,7 +211,7 @@ Figure 1.1: <em>23 pairs of chromosomes from parents (left) and Chromosome unwou
 </p>
 <p>These next two drawings show how the segments of DNA creates an individual’s genes and the nucleotides and <em>alleles</em> inside that create a genetic variant. So, within each long strand of DNA wrapped into the chromosome, there are segments that give us certain traits. These are called genes. The DNA and their genes are made up of four different nucleotide base pairs in between the sugar-phosphate backbone of the DNA (the outside lines). The four nucleotide bases are: adenine (A), thymine (T), cytosine (C), and guanine (G). In the vocab section, I mentioned that these are called alleles and they have specific pairings. A will always be with T just as C will always be with G.</p>
 <p>We can see in these visualizations that we can zoom into some segement of DNA and see a <em>SNV</em> where there are two possible alleles. This is called <em>biallelic</em>.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
 <img src="images/dna-gene.png" alt="*Some gene segment from DNA sequence (left) and genetic variant (right)*" width="50%" /><img src="images/dna-genetic-variant.png" alt="*Some gene segment from DNA sequence (left) and genetic variant (right)*" width="50%" />
 <p class="caption">
 Figure 1.2: <em>Some gene segment from DNA sequence (left) and genetic variant (right)</em>
@@ -398,7 +401,7 @@ x_j &amp;= \text{number of minor alleles at position }j
 <h2><span class="header-section-number">1.4</span> Visualizing GWAS<a href="genome-wide-association-studies-gwas.html#visualizing-gwas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Since our studies may have many many SNPs to test significance for, it can be hard to visualize. If we just take and plot our p-values vs each SNP’s position in a scatter plot, it won’t look very nice. There are too many values crowing around each other. Visualizing data always helps, and there is a fix for this issue.</p>
 <p>We can create a <em>Manhattan Plot</em> with the <code>manhattan()</code> function in the <code>qqman</code> package to visualize our significance results. Below is an image of an example Manhattan plot to give an idea of what our p-values look like for each SNP.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
 <img src="images/man-plot.png" alt="*Manhattan plot example*" width="70%" />
 <p class="caption">
 Figure 1.3: <em>Manhattan plot example</em>
@@ -407,7 +410,7 @@ Figure 1.3: <em>Manhattan plot example</em>
 <p><br />
 </p>
 <p>Another type of visualization we can use as a diagnostic tool are called QQ plots. These plots allow us to compare the results from our study to what we would see if no SNPs were associated with our disease of interest. We would expect that not all of the SNPs in our study are associated with the trait, so most should fall on the <span class="math inline">\(y = x\)</span> line. If there are some SNPs that we find are associated with the trait of interest, we would visually see some points above the diagonal <span class="math inline">\(y = x\)</span>.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-9"></span>
 <img src="images/qq-plot.png" alt="*QQ plot example*" width="50%" />
 <p class="caption">
 Figure 1.4: <em>QQ plot example</em>
