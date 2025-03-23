@@ -1,11 +1,54 @@
 # Genetic Ancestry
 
-### Some Vocabulary {.unnumbered}
+What is ancestry, and what can genetic data tell us? There are several ways that one can think about genetic ancestry. In these chapters, we will consider genetic ancestry to loosely mean the genetic relationship between you and your ancestors.
+
+An important idea to remember throughout this chapter is *genetic similarity*. If you have ever taken a genetic test through a company like 23andMe or Ancestry.com you are most likely familiar with this concept. When you take one of these tests by sending in some of your DNA, these companies are reporting back to you how similar your DNA is compared to different populations.
+
+The concept of different populations comes up a lot in these contexts. As with all scientific research, there are some ethical issues surrounding how researchers classify populations in genetic studies. We will get into this next.
+
+\
 
 ## Describing Human Populations
 
+When a researcher is working with genetic data, they will likely use some sort of population descriptor to attempt to capture complex differences in human genetics. 
+
+When you look at the results of your personal DNA test, you will likely see your ancestry broken down into smaller percentages of regions or peoples that contribute to 100% you. The way these regions are described brings with it some questions you may have never thought of before:
+
+- *How are regions defined? Are political borders used in every case?*
+
+- *What is the genetic "line" between being reported as native to one area versus another geography close by? How specific can this get?*
+
+
+
 ### Population Admixture
+
+
+
+\
+\
 
 ## Principal Component Analysis
 
+
+
+\
+\
+
 ## Omitted Variable Bias
+
+
+
+\
+
+
+## Glossary {-}
+
+Terms for this chapter and beyond.
+
+-   [*Pedigree*]{.underline}: how genealogical ancestors are related to each other, like an extensive family tree
+
+-   [*Genealogical ancestry*]{.underline}: the identifiable ancestors in your pedigree
+
+-   [*Genetic ancestry*]{.underline}: the paths through one's pedigree by which genetic traits have been inherited
+
+-   [*Genetic similarity*]{.underline}: classifying genomes as similar to specific populations

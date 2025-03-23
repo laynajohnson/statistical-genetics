@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-03-20" />
+<meta name="date" content="2025-03-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -143,7 +143,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html"><i class="fa fa-check"></i><b>1</b> Genome-Wide Association Studies (GWAS)</a>
 <ul>
-<li class="chapter" data-level="" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#terms"><i class="fa fa-check"></i>Terms</a></li>
 <li class="chapter" data-level="1.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#introduction-to-gwas"><i class="fa fa-check"></i><b>1.1</b> Introduction to GWAS</a>
 <ul>
 <li class="chapter" data-level="1.1.1" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#genome-breakdown"><i class="fa fa-check"></i><b>1.1.1</b> Genome Breakdown</a></li>
@@ -156,16 +155,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="1.4" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#visualizing-gwas"><i class="fa fa-check"></i><b>1.4</b> Visualizing GWAS</a></li>
 <li class="chapter" data-level="" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#wrapping-up"><i class="fa fa-check"></i>Wrapping up</a></li>
+<li class="chapter" data-level="" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#glossary"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html"><i class="fa fa-check"></i><b>2</b> Genetic Ancestry</a>
 <ul>
-<li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#some-vocabulary"><i class="fa fa-check"></i>Some Vocabulary</a></li>
 <li class="chapter" data-level="2.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#describing-human-populations"><i class="fa fa-check"></i><b>2.1</b> Describing Human Populations</a>
 <ul>
 <li class="chapter" data-level="2.1.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#population-admixture"><i class="fa fa-check"></i><b>2.1.1</b> Population Admixture</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#principal-component-analysis"><i class="fa fa-check"></i><b>2.2</b> Principal Component Analysis</a></li>
 <li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3</b> Omitted Variable Bias</a></li>
+<li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#glossary-1"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -189,20 +189,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="genetic-ancestry" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number"> 2</span> Genetic Ancestry<a href="genetic-ancestry.html#genetic-ancestry" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="some-vocabulary" class="section level3 unnumbered hasAnchor">
-<h3>Some Vocabulary<a href="genetic-ancestry.html#some-vocabulary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-</div>
+<p>What is ancestry, and what can genetic data tell us? There are several ways that one can think about genetic ancestry. In these chapters, we will consider genetic ancestry to loosely mean the genetic relationship between you and your ancestors.</p>
+<p>An important idea to remember throughout this chapter is <em>genetic similarity</em>. If you have ever taken a genetic test through a company like 23andMe or Ancestry.com you are most likely familiar with this concept. When you take one of these tests by sending in some of your DNA, these companies are reporting back to you how similar your DNA is compared to different populations.</p>
+<p>The concept of different populations comes up a lot in these contexts. As with all scientific research, there are some ethical issues surrounding how researchers classify populations in genetic studies. We will get into this next.</p>
+<p><br />
+</p>
 <div id="describing-human-populations" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Describing Human Populations<a href="genetic-ancestry.html#describing-human-populations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a researcher is working with genetic data, they will likely use some sort of population descriptor to attempt to capture complex differences in human genetics.</p>
+<p>When you look at the results of your personal DNA test, you will likely see your ancestry broken down into smaller percentages of regions or peoples that contribute to 100% you. The way these regions are described brings with it some questions you may have never thought of before:</p>
+<ul>
+<li><p><em>How are regions defined? Are political borders used in every case?</em></p></li>
+<li><p><em>What is the genetic “line” between being reported as native to one area versus another geography close by? How specific can this get?</em></p></li>
+</ul>
 <div id="population-admixture" class="section level3 hasAnchor" number="2.1.1">
 <h3><span class="header-section-number">2.1.1</span> Population Admixture<a href="genetic-ancestry.html#population-admixture" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><br />
+<br />
+</p>
 </div>
 </div>
 <div id="principal-component-analysis" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Principal Component Analysis<a href="genetic-ancestry.html#principal-component-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><br />
+<br />
+</p>
 </div>
 <div id="omitted-variable-bias" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Omitted Variable Bias<a href="genetic-ancestry.html#omitted-variable-bias" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><br />
+</p>
+</div>
+<div id="glossary-1" class="section level2 unnumbered hasAnchor">
+<h2>Glossary<a href="genetic-ancestry.html#glossary-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Terms for this chapter and beyond.</p>
+<ul>
+<li><p><u><em>Pedigree</em></u>: how genealogical ancestors are related to each other, like an extensive family tree</p></li>
+<li><p><u><em>Genealogical ancestry</em></u>: the identifiable ancestors in your pedigree</p></li>
+<li><p><u><em>Genetic ancestry</em></u>: the paths through one’s pedigree by which genetic traits have been inherited</p></li>
+<li><p><u><em>Genetic similarity</em></u>: classifying genomes as similar to specific populations</p></li>
+</ul>
 
 </div>
 </div>
