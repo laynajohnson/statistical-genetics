@@ -18,20 +18,37 @@ When you look at the results of your personal DNA test, you will likely see your
 
 -   *What is the genetic "line" between being reported as native to one area versus another geography close by? How specific can this get?*
 
-So, what are the recommended ways to describe human populations? 
+So, what are the recommended ways to describe human populations?
+
+-----------------------------------------------------------------
+
+1.  To start, you should never use race as a descriptor of genetic variation. Race is a concept created by white people in the past to other different peoples. There is no reason to use these arbitrary descriptors in a genetic study.
+
+2.  Different populations do not exist as discrete genetic clusters, but instead as a continuum across space and time. Assigning constricting labels to different populations can be harmful, especially if you are not conscious of potential impacts of your chosen terminology.
+
+    a.  Think about if there are different ways to classify populations related environmental factors rather than the people themselves. Genetic similarity, geography, and indigeneity are some top choices provided by the National Academies of Sciences.
+
+
+3.  Explaining the choices for using specific terminology to describe human populations.
+    a.  Being aware of cultures and incorporating their thoughts into your choices. Maybe you also need multiple labels, but it is important to remain consistent.
+
+
+4.  Do your research on what the current recommendations are for the type of genetic study you are performing and what different institutions and organizations encourage. These can change with time, so make sure to check with any and every study.
+
+----------------------------------------------
+
+\
 
 ### Population Admixture
 
 As our world has become so interconnected between geographies and people's from long ago to the present, many of us have DNA inherited from multiple populations. The general term for this is *population admixture*.
-
-
 
 \
 \
 
 ## Principal Component Analysis
 
-If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a technique to reduce the dimensionality of correlated variables while keeping as much variation as possible. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will  represent genetic variation in fewer dimensions made up of the original data.
+If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a technique to reduce the dimensionality of correlated variables while keeping as much variation as possible. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will represent genetic variation in fewer dimensions made up of the original data.
 
 The first few PC's explain the most variation in our data. Here is an example of what the PC's we create from this method could look like:
 
@@ -40,9 +57,9 @@ The first few PC's explain the most variation in our data. Here is an example of
 \text{PC}2 &= a{21}x_1 + a_{22}x_2 + \dots + a_{2p}x_p \\ 
 &\vdots \\ 
 \text{PC}n &= a{n1}x_1 + a_{n2}x_2 + \dots + a_{np}x_p 
-\end{align} 
+\end{align}
 
-where 
+where
 
 \begin{align}
 & x_1, x_2, \dots, x_p \text{ are the original SNPs and} \\
@@ -101,13 +118,10 @@ snps <- as.data.frame(cbind(trait, snps))
 
 ```
 
-
 \
 \
 
 ## Confounding Variables
-
-
 
 ### Omitted Variable Bias
 
