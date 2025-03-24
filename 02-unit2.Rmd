@@ -18,6 +18,8 @@ When you look at the results of your personal DNA test, you will likely see your
 
 -   *What is the genetic "line" between being reported as native to one area versus another geography close by? How specific can this get?*
 
+So, what are the recommended ways to describe human populations? 
+
 ### Population Admixture
 
 As our world has become so interconnected between geographies and people's from long ago to the present, many of us have DNA inherited from multiple populations. The general term for this is *population admixture*.
@@ -29,18 +31,76 @@ As our world has become so interconnected between geographies and people's from 
 
 ## Principal Component Analysis
 
-If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a dimension reduction method for correlated variables. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will group together the SNPs that contribute the most similarly to differences in population, effectively leaving us with less data overall.
+If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a technique to reduce the dimensionality of correlated variables while keeping as much variation as possible. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will  represent genetic variation in fewer dimensions made up of the original data.
 
-The first few PC's explain the most variation in our data. Here is an example of what the PC's we create from this method look like:
+The first few PC's explain the most variation in our data. Here is an example of what the PC's we create from this method could look like:
 
-\$\$ \begin{align}
-\text{PC}_1 & = a_{11}x_1 + a_{12}x_2 \dots \\
-\text{PC}_2 & = a_{12}x_1 + a_{24}x_2 \dots \\
-\dots \\
-\text{PC}_n & = a_{b}x_1 + a_cx_2 \dots
+\begin{align} 
+\text{PC}1 &= a{11}x_1 + a_{12}x_2 + \dots + a_{1p}x_p \\ 
+\text{PC}2 &= a{21}x_1 + a_{22}x_2 + \dots + a_{2p}x_p \\ 
+&\vdots \\ 
+\text{PC}n &= a{n1}x_1 + a_{n2}x_2 + \dots + a_{np}x_p 
+\end{align} 
+
+where 
+
+\begin{align}
+& x_1, x_2, \dots, x_p \text{ are the original SNPs and} \\
+& a_{ij} \text{ are the weights of each SNP towards a PC}
 \end{align}
 
-\$\$
+\
+
+### Genetic Data PCA
+
+We can use PCA with genetic data in order to correct for stratification from things like population structure. Say there is some set of SNPs that have very different *MAF* between populations. These features are most likely correlated to the difference between populations and will contribute most to the top PCs.
+
+Let's simulate some genetic data to run PCA on and break down some of the concepts briefly mentioned above. We will use similar simulation code to the last chapter on GWAS.
+
+```{r message= FALSE}
+library(tidyverse)
+library(broom)
+```
+
+*Simulating data*
+
+```{r}
+# input number of people in the study and the minor allele frequency
+do_one <- function(n_ppl, MAF){
+  snp <- rbinom(n = n_ppl, size = 2, p = MAF)
+  return(snp)
+}
+
+# instead of for 1000 variants like we did in the last chapter, we will make a smaller sets of variants for two populations each with 200 people (400 people total)
+
+set.seed(494)
+snps_big <- replicate(15, do_one(n_ppl = 400, MAF = 0.2)) # snps that look similar between populations
+snps_pop1 <- replicate(3, do_one(n_ppl = 200, MAF = 0.7)) # snps frequent in population 1
+snps_pop2 <- replicate(3, do_one(n_ppl = 200, MAF = 0)) # snps not frequent in population 2
+
+# creating populations and joining
+
+population <- 1
+snps_pop1 <- cbind(population, snps_pop1)
+population <- 2
+snps_pop2 <- cbind(population, snps_pop2)
+snps_pops <- rbind(snps_pop1, snps_pop2)
+
+# Combine our data with populations and snps
+
+snps <- as.data.frame(cbind(snps_pops, snps_big))
+
+# simulating a trait on snp 4 in our data
+n <- 400 # number of individuals 
+trait <- 2 * snps[,'V4'] + rnorm(n, 0, 1) # y = 2 * x + e
+
+trait <- as.data.frame(trait) 
+
+# joining snps and trait
+snps <- as.data.frame(cbind(trait, snps))
+
+```
+
 
 \
 \
@@ -65,6 +125,6 @@ Terms for this chapter and beyond.
 
 -   [*Genetic similarity*]{.underline}: classifying genomes as similar to specific populations
 
-    -   [*Population admixture*]{.underline}: the mating of individuals with different geographical and continental origins
+    -   [*Population admixture*]{.underline}: the mating of individuals with different geographical/continental origins
 
 -   [*Principal Component Analysis*]{.underline}:
