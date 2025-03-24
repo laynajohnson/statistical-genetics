@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-03-23" />
+<meta name="date" content="2025-03-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="genome-wide-association-studies-gwas.html"/>
-
+<link rel="next" href="last-unit.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -54,6 +54,70 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -99,13 +163,17 @@
 <ul>
 <li class="chapter" data-level="2.1.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#population-admixture"><i class="fa fa-check"></i><b>2.1.1</b> Population Admixture</a></li>
 </ul></li>
-<li class="chapter" data-level="2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#principal-component-analysis"><i class="fa fa-check"></i><b>2.2</b> Principal Component Analysis</a></li>
+<li class="chapter" data-level="2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#principal-component-analysis"><i class="fa fa-check"></i><b>2.2</b> Principal Component Analysis</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#genetic-data-pca"><i class="fa fa-check"></i><b>2.2.1</b> Genetic Data PCA</a></li>
+</ul></li>
 <li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#confounding-variables"><i class="fa fa-check"></i><b>2.3</b> Confounding Variables</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#glossary-1"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path="last-unit.html"><a href="last-unit.html"><i class="fa fa-check"></i><b>3</b> Last Unit</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -141,6 +209,7 @@
 <li><p><em>How are regions defined? Are political borders used in every case?</em></p></li>
 <li><p><em>What is the genetic “line” between being reported as native to one area versus another geography close by? How specific can this get?</em></p></li>
 </ul>
+<p>So, what are the recommended ways to describe human populations?</p>
 <div id="population-admixture" class="section level3 hasAnchor" number="2.1.1">
 <h3><span class="header-section-number">2.1.1</span> Population Admixture<a href="genetic-ancestry.html#population-admixture" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>As our world has become so interconnected between geographies and people’s from long ago to the present, many of us have DNA inherited from multiple populations. The general term for this is <em>population admixture</em>.</p>
@@ -152,7 +221,7 @@
 <div id="principal-component-analysis" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Principal Component Analysis<a href="genetic-ancestry.html#principal-component-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a technique to reduce the dimensionality of correlated variables while keeping as much variation as possible. We will be left with principal components (PC’s) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will represent genetic variation in fewer dimensions made up of the original data.</p>
-<p>The first few PC’s explain the most variation in our data. Here is an example of what the PC’s we create from this method look like:</p>
+<p>The first few PC’s explain the most variation in our data. Here is an example of what the PC’s we create from this method could look like:</p>
 <p><span class="math display">\[\begin{align}
 \text{PC}1 &amp;= a{11}x_1 + a_{12}x_2 + \dots + a_{1p}x_p \\
 \text{PC}2 &amp;= a{21}x_1 + a_{22}x_2 + \dots + a_{2p}x_p \\
@@ -161,12 +230,55 @@
 \end{align}\]</span></p>
 <p>where</p>
 <p><span class="math display">\[\begin{align}
-x_1, x_2, \dots, x_p \text{ are the original SNPs and} \\
-a_{ij} \text{ are the weights of each SNP towards a PC}
+&amp; x_1, x_2, \dots, x_p \text{ are the original SNPs and} \\
+&amp; a_{ij} \text{ are the weights of each SNP towards a PC}
 \end{align}\]</span></p>
+<p><br />
+</p>
+<div id="genetic-data-pca" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Genetic Data PCA<a href="genetic-ancestry.html#genetic-data-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can use PCA with genetic data in order to correct for stratification from things like population structure. Say there is some set of SNPs that have very different <em>MAF</em> between populations. These features are most likely correlated to the difference between populations and will contribute most to the top PCs.</p>
+<p>Let’s simulate some genetic data to run PCA on and break down some of the concepts briefly mentioned above. We will use similar simulation code to the last chapter on GWAS.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="genetic-ancestry.html#cb11-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href="genetic-ancestry.html#cb11-2" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code></pre></div>
+<p><em>Simulating data</em></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="genetic-ancestry.html#cb12-1" tabindex="-1"></a><span class="co"># input number of people in the study and the minor allele frequency</span></span>
+<span id="cb12-2"><a href="genetic-ancestry.html#cb12-2" tabindex="-1"></a>do_one <span class="ot">&lt;-</span> <span class="cf">function</span>(n_ppl, MAF){</span>
+<span id="cb12-3"><a href="genetic-ancestry.html#cb12-3" tabindex="-1"></a>  snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n_ppl, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> MAF)</span>
+<span id="cb12-4"><a href="genetic-ancestry.html#cb12-4" tabindex="-1"></a>  <span class="fu">return</span>(snp)</span>
+<span id="cb12-5"><a href="genetic-ancestry.html#cb12-5" tabindex="-1"></a>}</span>
+<span id="cb12-6"><a href="genetic-ancestry.html#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="genetic-ancestry.html#cb12-7" tabindex="-1"></a><span class="co"># instead of for 1000 variants like we did in the last chapter, we will make a smaller sets of variants for two populations each with 200 people (400 people total)</span></span>
+<span id="cb12-8"><a href="genetic-ancestry.html#cb12-8" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="genetic-ancestry.html#cb12-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>)</span>
+<span id="cb12-10"><a href="genetic-ancestry.html#cb12-10" tabindex="-1"></a>snps_big <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">15</span>, <span class="fu">do_one</span>(<span class="at">n_ppl =</span> <span class="dv">400</span>, <span class="at">MAF =</span> <span class="fl">0.2</span>)) <span class="co"># snps that look similar between populations</span></span>
+<span id="cb12-11"><a href="genetic-ancestry.html#cb12-11" tabindex="-1"></a>snps_pop1 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">3</span>, <span class="fu">do_one</span>(<span class="at">n_ppl =</span> <span class="dv">200</span>, <span class="at">MAF =</span> <span class="fl">0.7</span>)) <span class="co"># snps frequent in population 1</span></span>
+<span id="cb12-12"><a href="genetic-ancestry.html#cb12-12" tabindex="-1"></a>snps_pop2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">3</span>, <span class="fu">do_one</span>(<span class="at">n_ppl =</span> <span class="dv">200</span>, <span class="at">MAF =</span> <span class="dv">0</span>)) <span class="co"># snps not frequent in population 2</span></span>
+<span id="cb12-13"><a href="genetic-ancestry.html#cb12-13" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="genetic-ancestry.html#cb12-14" tabindex="-1"></a><span class="co"># creating populations and joining</span></span>
+<span id="cb12-15"><a href="genetic-ancestry.html#cb12-15" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="genetic-ancestry.html#cb12-16" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb12-17"><a href="genetic-ancestry.html#cb12-17" tabindex="-1"></a>snps_pop1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(population, snps_pop1)</span>
+<span id="cb12-18"><a href="genetic-ancestry.html#cb12-18" tabindex="-1"></a>population <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb12-19"><a href="genetic-ancestry.html#cb12-19" tabindex="-1"></a>snps_pop2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(population, snps_pop2)</span>
+<span id="cb12-20"><a href="genetic-ancestry.html#cb12-20" tabindex="-1"></a>snps_pops <span class="ot">&lt;-</span> <span class="fu">rbind</span>(snps_pop1, snps_pop2)</span>
+<span id="cb12-21"><a href="genetic-ancestry.html#cb12-21" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="genetic-ancestry.html#cb12-22" tabindex="-1"></a><span class="co"># Combine our data with populations and snps</span></span>
+<span id="cb12-23"><a href="genetic-ancestry.html#cb12-23" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="genetic-ancestry.html#cb12-24" tabindex="-1"></a>snps <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(snps_pops, snps_big))</span>
+<span id="cb12-25"><a href="genetic-ancestry.html#cb12-25" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="genetic-ancestry.html#cb12-26" tabindex="-1"></a><span class="co"># simulating a trait on snp 4 in our data</span></span>
+<span id="cb12-27"><a href="genetic-ancestry.html#cb12-27" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">400</span> <span class="co"># number of individuals </span></span>
+<span id="cb12-28"><a href="genetic-ancestry.html#cb12-28" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> snps[,<span class="st">&#39;V4&#39;</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># y = 2 * x + e</span></span>
+<span id="cb12-29"><a href="genetic-ancestry.html#cb12-29" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="genetic-ancestry.html#cb12-30" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(trait) </span>
+<span id="cb12-31"><a href="genetic-ancestry.html#cb12-31" tabindex="-1"></a></span>
+<span id="cb12-32"><a href="genetic-ancestry.html#cb12-32" tabindex="-1"></a><span class="co"># joining snps and trait</span></span>
+<span id="cb12-33"><a href="genetic-ancestry.html#cb12-33" tabindex="-1"></a>snps <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(trait, snps))</span></code></pre></div>
 <p><br />
 <br />
 </p>
+</div>
 </div>
 <div id="confounding-variables" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Confounding Variables<a href="genetic-ancestry.html#confounding-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -185,7 +297,7 @@ a_{ij} \text{ are the weights of each SNP towards a PC}
 <li><p><u><em>Genetic ancestry</em></u>: the paths through one’s pedigree by which genetic traits have been inherited</p></li>
 <li><p><u><em>Genetic similarity</em></u>: classifying genomes as similar to specific populations</p>
 <ul>
-<li><u><em>Population admixture</em></u>: the mating of individuals with different geographical and continental origins</li>
+<li><u><em>Population admixture</em></u>: the mating of individuals with different geographical/continental origins</li>
 </ul></li>
 <li><p><u><em>Principal Component Analysis</em></u>:</p></li>
 </ul>
@@ -197,8 +309,8 @@ a_{ij} \text{ are the weights of each SNP towards a PC}
           </div>
         </div>
       </div>
-<a href="genome-wide-association-studies-gwas.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="genome-wide-association-studies-gwas.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="last-unit.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
