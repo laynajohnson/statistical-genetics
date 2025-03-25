@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title> 1 Genome-Wide Association Studies (GWAS) | Statistical Genetics Content Summary</title>
-  <meta name="description" content=" 1 Genome-Wide Association Studies (GWAS) | Statistical Genetics Content Summary" />
+  <title> 1 Genome-Wide Association Studies (GWAS) | 04-glossary</title>
+  <meta name="description" content=" 1 Genome-Wide Association Studies (GWAS) | 04-glossary" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content=" 1 Genome-Wide Association Studies (GWAS) | Statistical Genetics Content Summary" />
+  <meta property="og:title" content=" 1 Genome-Wide Association Studies (GWAS) | 04-glossary" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content=" 1 Genome-Wide Association Studies (GWAS) | Statistical Genetics Content Summary" />
+  <meta name="twitter:title" content=" 1 Genome-Wide Association Studies (GWAS) | 04-glossary" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-03-24" />
+<meta name="date" content="2025-03-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -155,7 +155,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="1.4" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#visualizing-gwas"><i class="fa fa-check"></i><b>1.4</b> Visualizing GWAS</a></li>
 <li class="chapter" data-level="" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#wrapping-up"><i class="fa fa-check"></i>Wrapping up</a></li>
-<li class="chapter" data-level="" data-path="genome-wide-association-studies-gwas.html"><a href="genome-wide-association-studies-gwas.html#glossary"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html"><i class="fa fa-check"></i><b>2</b> Genetic Ancestry</a>
 <ul>
@@ -166,12 +165,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#principal-component-analysis"><i class="fa fa-check"></i><b>2.2</b> Principal Component Analysis</a>
 <ul>
 <li class="chapter" data-level="2.2.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#genetic-data-pca"><i class="fa fa-check"></i><b>2.2.1</b> Genetic Data PCA</a></li>
+<li class="chapter" data-level="2.2.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#gwas-and-pca"><i class="fa fa-check"></i><b>2.2.2</b> GWAS and PCA</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#confounding-variables"><i class="fa fa-check"></i><b>2.3</b> Confounding Variables</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#glossary-1"><i class="fa fa-check"></i>Glossary</a></li>
+<li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#glossary"><i class="fa fa-check"></i>Glossary</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="last-unit.html"><a href="last-unit.html"><i class="fa fa-check"></i><b>3</b> Last Unit</a></li>
 <li class="divider"></li>
@@ -186,7 +186,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistical Genetics Content Summary</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">04-glossary</a>
           </h1>
         </div>
 
@@ -314,10 +314,9 @@ E[y \mid x] = \beta_0 + \beta_1 x
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="genome-wide-association-studies-gwas.html#cb1-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>) <span class="co"># for reproducible random number generation</span></span>
 <span id="cb1-2"><a href="genome-wide-association-studies-gwas.html#cb1-2" tabindex="-1"></a>snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="dv">100</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> <span class="fl">0.1</span>) <span class="co"># 100 people, MAF = 0.1</span></span>
 <span id="cb1-3"><a href="genome-wide-association-studies-gwas.html#cb1-3" tabindex="-1"></a><span class="fu">print</span>(snp)</span></code></pre></div>
-<pre><code>##   [1] 0 0 0 0 0 0 0 0 1 1 0 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0
-##  [27] 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0
-##  [53] 0 0 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0 0 2 0 0
-##  [79] 0 0 0 0 0 1 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0</code></pre>
+<pre><code>##   [1] 0 0 0 0 0 0 0 0 1 1 0 1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##  [38] 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 1 1 0 0 0 0 1 0 0 0
+##  [75] 0 2 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0</code></pre>
 <p>We know from before that we actually would see way more than just one genetic variant for <span class="math inline">\(n\)</span> number of people. So, we can extend the above <code>rbinom</code> function into our own function in which we can choose the number of genetic variants to simulate per person</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="genome-wide-association-studies-gwas.html#cb3-1" tabindex="-1"></a><span class="co"># function doing the same as the one before, where we get to choose the number of people in the study and the minor allele frequency (MAF)</span></span>
 <span id="cb3-2"><a href="genome-wide-association-studies-gwas.html#cb3-2" tabindex="-1"></a>do_one <span class="ot">&lt;-</span> <span class="cf">function</span>(n_ppl, MAF){</span>
@@ -337,26 +336,19 @@ E[y \mid x] = \beta_0 + \beta_1 x
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="genome-wide-association-studies-gwas.html#cb8-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>) <span class="co"># set seed for reproducibility</span></span>
 <span id="cb8-2"><a href="genome-wide-association-studies-gwas.html#cb8-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">65</span>, <span class="at">sd =</span> <span class="dv">3</span>) <span class="co"># generate trait</span></span>
 <span id="cb8-3"><a href="genome-wide-association-studies-gwas.html#cb8-3" tabindex="-1"></a><span class="fu">print</span>(y)</span></code></pre></div>
-<pre><code>##   [1] 59.62481 63.88034 63.02679 62.50892 70.83525
-##   [6] 67.50514 63.61816 69.64214 64.97347 65.47989
-##  [11] 63.13887 63.07716 63.74931 64.70136 65.07071
-##  [16] 58.33367 61.91952 64.85250 65.66969 62.40541
-##  [21] 62.04025 61.84794 64.28388 65.04385 61.42188
-##  [26] 62.55285 59.29327 67.46579 61.65637 67.67236
-##  [31] 66.09086 70.02120 68.01750 60.73839 58.42093
-##  [36] 67.99430 65.89968 64.39152 65.65709 66.54789
-##  [41] 65.00309 65.34142 63.41219 68.68026 61.68235
-##  [46] 61.18094 68.73800 69.94243 66.55700 60.87955
-##  [51] 66.43440 56.08365 69.62706 68.09680 68.85878
-##  [56] 64.92834 63.05479 65.98005 64.87043 64.69823
-##  [61] 65.76869 67.50849 65.20761 62.59497 68.12195
-##  [66] 67.62197 66.63407 66.00194 62.77750 63.89318
-##  [71] 63.51581 71.79953 65.50906 68.08233 68.99696
-##  [76] 64.76795 69.99623 66.88639 65.01119 65.69350
-##  [81] 64.53200 64.69204 65.19411 64.11513 63.19411
-##  [86] 62.63277 62.99986 64.56554 67.31328 62.24985
-##  [91] 65.15231 61.25394 67.23057 65.94068 64.43938
-##  [96] 69.38935 66.89983 65.07994 63.90870 60.93687</code></pre>
+<pre><code>##   [1] 59.62481 63.88034 63.02679 62.50892 70.83525 67.50514 63.61816 69.64214
+##   [9] 64.97347 65.47989 63.13887 63.07716 63.74931 64.70136 65.07071 58.33367
+##  [17] 61.91952 64.85250 65.66969 62.40541 62.04025 61.84794 64.28388 65.04385
+##  [25] 61.42188 62.55285 59.29327 67.46579 61.65637 67.67236 66.09086 70.02120
+##  [33] 68.01750 60.73839 58.42093 67.99430 65.89968 64.39152 65.65709 66.54789
+##  [41] 65.00309 65.34142 63.41219 68.68026 61.68235 61.18094 68.73800 69.94243
+##  [49] 66.55700 60.87955 66.43440 56.08365 69.62706 68.09680 68.85878 64.92834
+##  [57] 63.05479 65.98005 64.87043 64.69823 65.76869 67.50849 65.20761 62.59497
+##  [65] 68.12195 67.62197 66.63407 66.00194 62.77750 63.89318 63.51581 71.79953
+##  [73] 65.50906 68.08233 68.99696 64.76795 69.99623 66.88639 65.01119 65.69350
+##  [81] 64.53200 64.69204 65.19411 64.11513 63.19411 62.63277 62.99986 64.56554
+##  [89] 67.31328 62.24985 65.15231 61.25394 67.23057 65.94068 64.43938 69.38935
+##  [97] 66.89983 65.07994 63.90870 60.93687</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="genome-wide-association-studies-gwas.html#cb10-1" tabindex="-1"></a><span class="co"># creating a single data frame for snps and trait</span></span>
 <span id="cb10-2"><a href="genome-wide-association-studies-gwas.html#cb10-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(y, snps))</span></code></pre></div>
 <p>With our SNPs and trait data together, we can perform a simulated GWAS study. But, we need another tool to help us solve this <span class="math inline">\((p&gt;n)\)</span> problem that occurs from trying to use one giant regression model. This will be explained next.</p>
@@ -427,29 +419,6 @@ Figure 1.4: <em>QQ plot example</em>
 <div id="wrapping-up" class="section level2 unnumbered hasAnchor">
 <h2>Wrapping up<a href="genome-wide-association-studies-gwas.html#wrapping-up" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>With that, we have come to the end of this chapter on genome-wide association studies (GWAS). You now have many of the concepts you need to understand this methodology and attempt to perform some studies yourself.</p>
-<p><br />
-</p>
-</div>
-<div id="glossary" class="section level2 unnumbered hasAnchor">
-<h2>Glossary<a href="genome-wide-association-studies-gwas.html#glossary" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>There are many terms that come along with talking about genetic data. The following are some more biology (genetics) related terms to remember as you read this unit summary. Refer to this list if you forget what a term means.</p>
-<ul>
-<li><p><u><em>SNPs (single nucleotide polymorphisms)</em></u>: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population</p>
-<ul>
-<li><p><u><em>Genome</em></u>: complete set of genes or genetic material</p></li>
-<li><p><u><em>Chromosome</em></u>: condensed DNA structure, all chromosomes together is the genome</p></li>
-</ul></li>
-<li><p><u><em>Genetic variants</em></u>: positions where DNA sequences differ</p>
-<ul>
-<li><u><em>SNV (single nucleotide variant)</em></u>: a single nucleotide change in the DNA sequence. <em>SNP</em> and <em>SNV</em> are typically used interchangeably. You might see <em>SNP</em> used in instances where the minor allele is not too rare</li>
-</ul></li>
-<li><p><u><em>Allele</em></u>: the different possible nucleotides at some position. The combinations are <em>A</em> - <em>T</em> and <em>G</em> - <em>C</em></p></li>
-<li><p><u><em>Minor allele</em></u>: at this location, which allele is the least common</p>
-<ul>
-<li><u><em>MAF (minor allele frequency)</em></u>: the frequency of the minor allele, can get very small</li>
-</ul></li>
-<li><p><u><em>Loci/locus</em></u>: means location, can be used to refer to a single <em>SNP</em> or a larger region in the genome</p></li>
-</ul>
 
 </div>
 </div>

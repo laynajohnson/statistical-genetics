@@ -1,0 +1,47 @@
+# Glossary
+
+There are many terms that come along with talking about genetic data. The following are some terms to remember as you read this summary. Refer to this list if you forget what a term means.
+
+## Unit 1
+
+-   [*SNPs (single nucleotide polymorphisms)*]{.underline}: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population
+
+    -   [*Genome*]{.underline}: complete set of genes or genetic material
+
+    -   [*Chromosome*]{.underline}: condensed DNA structure, all chromosomes together is the genome
+
+-   [*Genetic variants*]{.underline}: positions where DNA sequences differ
+
+    -   [*SNV (single nucleotide variant)*]{.underline}: a single nucleotide change in the DNA sequence. *SNP* and *SNV* are typically used interchangeably. You might see *SNP* used in instances where the minor allele is not too rare
+
+-   [*Allele*]{.underline}: the different possible nucleotides at some position. The combinations are *A* - *T* and *G* - *C*
+
+-   [*Minor allele*]{.underline}: at this location, which allele is the least common
+
+    -   [*MAF (minor allele frequency)*]{.underline}: the frequency of the minor allele, can get very small
+
+-   [*Loci/locus*]{.underline}: means location, can be used to refer to a single *SNP* or a larger region in the genome
+
+## Unit 2
+
+-   [*Pedigree*]{.underline}: how genealogical ancestors are related to each other, like an extensive family tree
+
+-   [*Genealogical ancestry*]{.underline}: the identifiable ancestors in your pedigree
+
+-   [*Genetic ancestry*]{.underline}: the paths through one's pedigree by which genetic traits have been inherited
+
+-   [*Genetic similarity*]{.underline}: classifying genomes as similar to specific populations
+
+    -   [*Population admixture*]{.underline}: the mating of individuals with different geographical/continental origins
+    
+-   [*Principal Component Analysis*]{.underline}: a method of dimension reduction to keep the most variation from our original data by weighting the variables togehter into new components (PCs).
+
+    -   [*Loading*]{.underline}: How much of each SNP contributes to a particular PC, the weights.
+    
+    -   [*Score*]{.underline}: the transformed values for individuals along the new PC axes.
+    
+-   [*Confounding*]{underline.}: 
+    
+-   [*Directed Acyclic Graph*]{underline.}: 
+
+

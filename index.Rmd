@@ -13,6 +13,8 @@ site: bookdown::bookdown_site
 knitr::include_graphics("images/cover-image.png")
 ```
 
-In the following chapters, you will find concepts and examples related to statistical genetics explained. This breakdown is more directed towards those who are familiar with RStudio coding and statistical concepts, but who may not be as familiar with genetics or biology. You will learn different terms and methodologies in statistical genetics. At the bottom of each chapter, there will be a **Glossary** containing terms referred to throughout the chapter. If you come across an unfamiliar term, refer to this reference section.
+In the following chapters, you will find concepts and examples related to statistical genetics explained. This breakdown is more directed towards those who are familiar with RStudio coding and statistical concepts, but who may not be as familiar with genetics or biology. You will learn different terms and methodologies in statistical genetics. The last section of this book is a **Glossary** containing terms referred to throughout the chapters. If you come across an unfamiliar term, refer to this section.
 
-Note that this site does not have all ideas and methods related to statistical genetics. This is only a small start, and there is much more to explore.
+Note that this site does not have all ideas and methods related to statistical genetics. This is only a small start, and there is much more to explore. References provided for definitions and concepts will be referenced in each section.
+
+Happy reading!
