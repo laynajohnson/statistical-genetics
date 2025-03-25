@@ -18,3 +18,6 @@ genetic-data-pca
 confounding-variables
 omitted-variable-bias
 last-unit
+ancestry-in-genetics-studies
+section
+section-1

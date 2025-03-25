@@ -1,6 +1,6 @@
 # Genetic Ancestry
 
-What is ancestry, and what can genetic data tell us? There are several ways that one can think about genetic ancestry. In these chapters, we will consider genetic ancestry to loosely mean the genetic relationship between you and your ancestors.
+What is ancestry, and what can genetic data tell us about it? There are several ways that one can think about genetic ancestry. In these chapters, we will consider genetic ancestry to loosely mean the genetic relationship between you and your ancestors.
 
 An important idea to remember throughout this chapter is *genetic similarity*. If you have ever taken a genetic test through a company like 23andMe or Ancestry.com you are most likely familiar with this concept. When you take one of these tests by sending in some of your DNA, these companies are reporting back to you how similar your DNA is compared to different populations.
 
@@ -43,12 +43,24 @@ So, what are the recommended ways to describe human populations?
 
 As our world has become so interconnected between geographies and people's from long ago to the present, many of us have DNA inherited from multiple populations. The general term for this is *population admixture*.
 
+There is not really any population that is completely homogeneous. Populations in the Americas tend to be more admixed due to  history of world discovery, slavery, and immigration as compared to other continents. In the United States especially, there are many more people with ancestors all over the world. That is not to say the Americas are the only place with admixed populations. Those with European ancestry, for example, can be more similar to each other than to individuals with ancestry from a different geographical/continental area, but there are still admixed populations here when we focus our scale to Europe only.
+
+When doing genetic research, you should keep this concept in mind as you collect, process, and report your data. Think about how ancestry is related to your study and which ones you are including to help guide your naming conventions and disclaimers on population differences. One way to go about this is to think of social classifications of population and trying to break those down. What would that look like?
+
+\
+
+#### Ancestry in Genetics Studies {-}
+
+When we conduct a genetic study, we want to be aware of the ancestry of our samples. Things like genetic similarity and continental geography come to mind. It is important to correct for these population structures built into our data so we can have the most accurate results. 
+
+One method we can use to account for population structures in genetic data is by performing *Principal Component Analysis*. We can also use PCA on admixed ancestry. We will go into what PCA is and how to apply it to genetic data next.
+
 \
 \
 
 ## Principal Component Analysis
 
-If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a technique to reduce the dimensionality of correlated variables while keeping as much variation as possible. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs, this method will represent genetic variation in fewer dimensions made up of the original data.
+If you have taken a class in linear algebra or machine learning, you may be familiar with the method of Principal Component Analysis (PCA). We use PCA as a technique to reduce the dimensionality of correlated variables while keeping as much variation as possible. We will be left with principal components (PC's) as weighted combinations of these variables that explain the most variation in our data. Essentially, instead of having thousands of SNPs representing genetic variation, this method will represent genetic variation in fewer dimensions made up of the original data.
 
 The first few PC's explain the most variation in our data. Here is an example of what the PC's we create from this method could look like:
 
@@ -66,57 +78,136 @@ where
 & a_{ij} \text{ are the weights of each SNP towards a PC}
 \end{align}
 
+The $a_n$ values represent the weights of each SNP that goes into each principal component. We call these the *loadings*. They are essentially telling you how important each SNP is to the PC.
+
+The $a_N$ values combined with the $x_1, x2, \dots$ values create our PCs, and these values we call the *scores*.  
+
 \
 
 ### Genetic Data PCA
 
-We can use PCA with genetic data in order to correct for stratification from things like population structure. Say there is some set of SNPs that have very different *MAF* between populations. These features are most likely correlated to the difference between populations and will contribute most to the top PCs.
+We can use PCA with genetic data in order to correct for stratification from things like population  (which is what we will be looking at with an example below). Say there is some set of SNPs that have very different *MAF* between populations. These features are most likely correlated to each other and stratify the data by representing the difference between populations and will contribute most to the top PCs.
 
-Let's simulate some genetic data to run PCA on and break down some of the concepts briefly mentioned above. We will use similar simulation code to the last chapter on GWAS.
+Let's simulate some genetic data to run PCA on and break down some of the concepts briefly mentioned above. We will use some similar simulation code to the last chapter on GWAS.
 
 ```{r message= FALSE}
 library(tidyverse)
 library(broom)
+library(GGally)
 ```
 
 *Simulating data*
 
-```{r}
-# input number of people in the study and the minor allele frequency
-do_one <- function(n_ppl, MAF){
-  snp <- rbinom(n = n_ppl, size = 2, p = MAF)
+```{r simulation}
+# simulate a genetic variant with freq. depending on which population the person belongs to
+sim_data_onevar <- function(pop, maf){
+  snp <- rbinom(n = length(pop), size = 2, p = maf[pop])
   return(snp)
 }
 
-# instead of for 1000 variants like we did in the last chapter, we will make a smaller sets of variants for two populations each with 200 people (400 people total)
+# create dataset with two types of SNPs
+popidx <- rep(1:2, each = 400)
+maf1 <- c(0, 0.8) # type 1: non-existent in pop 1, frequent in pop2
+maf2 <- c(0.6, 0.2) # type 2: higher frequency in pop 1 and lower in pop 2
+maf3 <- c(0.3, 0.32) # type 3: similar freq in pops 1 and 2
+
 
 set.seed(494)
-snps_big <- replicate(15, do_one(n_ppl = 400, MAF = 0.2)) # snps that look similar between populations
-snps_pop1 <- replicate(3, do_one(n_ppl = 200, MAF = 0.7)) # snps frequent in population 1
-snps_pop2 <- replicate(3, do_one(n_ppl = 200, MAF = 0)) # snps not frequent in population 2
+snps1 <- replicate(3, sim_data_onevar(pop = popidx, maf = maf1)) # create 3 (independent) snps of type 1
+snps2 <- replicate(1, sim_data_onevar(pop = popidx, maf = maf2)) # create 1 (independent) snp of type 2
+snps3 <- replicate(16, sim_data_onevar(pop = popidx, maf = maf3)) # create 15 (independent) snps of type 3
 
-# creating populations and joining
-
-population <- 1
-snps_pop1 <- cbind(population, snps_pop1)
-population <- 2
-snps_pop2 <- cbind(population, snps_pop2)
-snps_pops <- rbind(snps_pop1, snps_pop2)
-
-# Combine our data with populations and snps
-
-snps <- as.data.frame(cbind(snps_pops, snps_big))
+pcadata <- cbind(popidx, snps1, snps2, snps3) %>%
+  as.data.frame()
+names(pcadata) <- c('population', paste0('SNP', 1:(ncol(pcadata)-1)))
 
 # simulating a trait on snp 4 in our data
-n <- 400 # number of individuals 
-trait <- 2 * snps[,'V4'] + rnorm(n, 0, 1) # y = 2 * x + e
+n <- 800 # number of individuals 
+trait <- 2 * pcadata[,'SNP4'] + rnorm(n, 0, 1) # y = 2 * x + e
 
 trait <- as.data.frame(trait) 
 
 # joining snps and trait
-snps <- as.data.frame(cbind(trait, snps))
+pcadata <- as.data.frame(cbind(trait, pcadata))
 
 ```
+
+
+Calculating the MAF for each SNP in our data summarized by population. We create a function that will add the minor alleles and divide by 2x the number of people we have in the data.
+
+```{r maf}
+get_MAF <- function(snp){
+  sum(snp)/(2*length(snp))
+}
+
+# get observed allele frequency for each population
+pcadata %>%
+  group_by(population) %>%
+  summarize_all(get_MAF)
+```
+
+In order to run PCA, we need to have only the genotype information from our data. This means removing the `population` and `trait` variables. Then we will perform PCA on our remaining data.
+
+```{r performing-pca}
+genotype <- pcadata %>%
+  select(-population, -trait)
+
+# performing pca
+pca_out <- prcomp(genotype, center = TRUE, scale = TRUE)
+
+# storing loadings and scores from pca
+pca_loadings <- pca_out$rotation
+pca_scores <- pca_out$x
+```
+
+\
+
+#### Visualizing PCA {-}
+
+Let's take a look at what the components of our PCs look like.
+
+
+*Score Plot*
+
+```{r score-plot}
+pca_scores %>%
+  as.data.frame() %>% # convert pca_scores into a data frame for plotting
+  mutate(population = as.factor(pcadata$population)) %>%  # add the population labels
+  ggplot(aes(x = PC1, y = PC2, color = population)) + # then plot
+  geom_point() + 
+  scale_color_brewer(palette = 'Dark2')+
+  theme_minimal()
+```
+
+The scores above represent the new values for the individuals in our study along the PC1 and PC2 axes. In our plot, we colored the points by population. Before we performed PCA, we took out our population variable, yet this graph shows how our data is still separated into two populations through this method.
+
+We can also use a kind of visualization called parallel coordinates plot. This plot is another way to view how the PCs capture our populations by showing the scores for all PCs at one time. As we learned from our score plot, we see PC1 and PC2 capture population membership, while later PCs do not.
+
+```{r parallel-coords-plot}
+# parallel coordinates plot
+pca_scores %>%
+  as.data.frame() %>%
+  mutate(population = as.factor(pcadata$population)) %>% 
+  ggparcoord(columns = 1:20, groupColumn = 'population', alpha = 0.2) + 
+  theme_minimal() + 
+  scale_color_brewer(palette = 'Dark2')
+```
+
+Remembering from before, *loadings* show us how much each SNP contributes to a PC. We can view this PC by PC. We will look at plots for for PC1 to PC4.
+
+```{r loadings-plot, message= FALSE, warning=FALSE}
+library(reshape2)
+
+pca_loadings[, 1:4] %>%
+  melt() %>% 
+  ggplot(aes(x = Var1, y = value, fill = Var1)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ Var2) + 
+  labs(y = "loadings", x = "original features", fill = "original features") +
+  theme_minimal() +
+  theme(axis.text.x=element_blank(), axis.ticks.x = element_blank())
+```
+
 
 \
 \
@@ -141,4 +232,8 @@ Terms for this chapter and beyond.
 
     -   [*Population admixture*]{.underline}: the mating of individuals with different geographical/continental origins
 
--   [*Principal Component Analysis*]{.underline}:
+-   [*Principal Component Analysis*]{.underline}: a method of dimension reduction to keep the most variation from our original data by weighting the variables togehter into new components (PCs).
+
+    -   [*Loading*]{.underline}: How much of each SNP contributes to a particular PC, the weights.
+    
+    -   [*Score*]{.underline}: the transformed values for individuals along the new PC axes.
