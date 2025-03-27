@@ -345,13 +345,13 @@ $$
 E[y|x] = X\beta
 $$
 
-We can derive the estimator for $\beta$ with some linear algebra ([check here](https://mac-stat.github.io/Stat155Notes/) for how we get this)
+We can derive the estimator for $\beta$ with some linear algebra ([check here](https://mac-stat.github.io/Stat155Notes/) for how we get this).
 
 $$
 \hat\beta = (X^TX)^{-1}X^Ty
 $$
 
-The last bit of information we need to start working on this proof that $E[\hat\beta]= \beta$ (OLS estimator is unbiased) is what $y$ equals. We get this from the linear model we are building where $\hat y = X\hat\beta$.
+The last bit of information we need to start working on this proof that $E[\hat\beta]= \beta$ (OLS estimator is unbiased) is to know that we fit the right model. Assume we did this. The model we are building is $\hat y = X\hat\beta$.
 
 $$
 y = X\beta + \epsilon\\
@@ -369,6 +369,10 @@ E[\hat\beta] &= E[(X^TX)^{-1}X^Ty]\\
 E[\hat\beta]& = \beta
 \end{align}
 
+Wow, the OLS estimator is unbiased when we fit the correct model! But what happens if we do not fit the correct model? Let's do another example.
+
+Say it is true that $y = X\beta + Z\gamma +\epsilon$, where again $E[\epsilon] = 0$. Even though this is the truth, we don't know this. So we instead fit the same model from before: $\hat y = X\hat\beta$. We use the same $\hat\beta$ derived value from earlier.
+
 
 \begin{align}
 E[\hat\beta] &= E[(X^TX)^{-1}X^Ty]\\
@@ -380,7 +384,11 @@ E[\hat\beta] &= E[(X^TX)^{-1}X^Ty]\\
 & = \beta + (X^TX)^{-1}X^TZ\gamma
 \end{align}
 
+We are done now, but we cannot say the estimator is unbiased as we don't have $E[\hat\beta]= \beta$. Instead, we have this extra term of $(X^TX)^{-1}X^TZ\gamma$. This is the bias! So, we failed to adjust for our confounding variable $Z$ and ended up with this bias. 
 
+Here is another thing to think about, what happens if our $y = 0$ or if $X^TZ = 0$? Here is what this idea looks like in a DAG, but also try proving this like we did together before.
+
+### Correlated Data
 
 
 

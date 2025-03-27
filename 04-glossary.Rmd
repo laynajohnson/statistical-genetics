@@ -1,8 +1,8 @@
-# Glossary
+# Glossary {-}
 
 There are many terms that come along with talking about genetic data. The following are some terms to remember as you read this summary. Refer to this list if you forget what a term means.
 
-## Unit 1
+## Unit 1 {-}
 
 -   [*SNPs (single nucleotide polymorphisms)*]{.underline}: a single nucleotide at a specific position in the genome, genetic variant at least 1% frequent in the population
 
@@ -22,7 +22,7 @@ There are many terms that come along with talking about genetic data. The follow
 
 -   [*Loci/locus*]{.underline}: means location, can be used to refer to a single *SNP* or a larger region in the genome
 
-## Unit 2
+## Unit 2 {-}
 
 -   [*Pedigree*]{.underline}: how genealogical ancestors are related to each other, like an extensive family tree
 
@@ -40,14 +40,14 @@ There are many terms that come along with talking about genetic data. The follow
     
     -   [*Score*]{.underline}: the transformed values for individuals along the new PC axes.
     
--   [*Confounding*]{underline.}: variables we should adjust for as they are causally related to both our predictor and outcome
+-   [*Confounding*]{.underline}: variables we should adjust for as they are causally related to both our predictor and outcome
     
--   [*Directed Acyclic Graph*]{underline.}: 
+-   [*Directed Acyclic Graph*]{.underline}: also known as a causal graph. These graphs show how one believes variables are related to each other
 
--   [*Bias*]{underline.}: tells us how far off target we are
+-   [*Bias*]{.underline}: tells us how far off target we are
 
--   [*Variance*]{underline.}: tells us how much our results differ from attempt to attempt
+-   [*Variance*]{.underline}: tells us how much our results differ from attempt to attempt
 
--   [*OLS*]{underline.}: ordinary linear regression
+-   [*OLS*]{.underline}: ordinary linear regression
 
 

@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="genome-wide-association-studies-gwas.html"/>
-<link rel="next" href="correlated-data.html"/>
+<link rel="next" href="correlated-data-1.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -170,13 +170,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#confounding-variables"><i class="fa fa-check"></i><b>2.3</b> Confounding Variables</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
+<li class="chapter" data-level="2.3.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#correlated-data"><i class="fa fa-check"></i><b>2.3.2</b> Correlated Data</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="correlated-data.html"><a href="correlated-data.html"><i class="fa fa-check"></i><b>3</b> Correlated Data</a></li>
-<li class="chapter" data-level="4" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>4</b> Glossary</a>
+<li class="chapter" data-level="3" data-path="correlated-data-1.html"><a href="correlated-data-1.html"><i class="fa fa-check"></i><b>3</b> Correlated Data</a></li>
+<li class="chapter" data-level="" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i>Glossary</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="glossary.html"><a href="glossary.html#unit-1"><i class="fa fa-check"></i><b>4.1</b> Unit 1</a></li>
-<li class="chapter" data-level="4.2" data-path="glossary.html"><a href="glossary.html#unit-2"><i class="fa fa-check"></i><b>4.2</b> Unit 2</a></li>
+<li class="chapter" data-level="" data-path="glossary.html"><a href="glossary.html#unit-1"><i class="fa fa-check"></i>Unit 1</a></li>
+<li class="chapter" data-level="" data-path="glossary.html"><a href="glossary.html#unit-2"><i class="fa fa-check"></i>Unit 2</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -472,11 +473,11 @@ E[\hat\beta] = \beta
 <p><span class="math display">\[
 E[y|x] = X\beta
 \]</span></p>
-<p>We can derive the estimator for <span class="math inline">\(\beta\)</span> with some linear algebra (<a href="https://mac-stat.github.io/Stat155Notes/">check here</a> for how we get this)</p>
+<p>We can derive the estimator for <span class="math inline">\(\beta\)</span> with some linear algebra (<a href="https://mac-stat.github.io/Stat155Notes/">check here</a> for how we get this).</p>
 <p><span class="math display">\[
 \hat\beta = (X^TX)^{-1}X^Ty
 \]</span></p>
-<p>The last bit of information we need to start working on this proof that <span class="math inline">\(E[\hat\beta]= \beta\)</span> (OLS estimator is unbiased) is what <span class="math inline">\(y\)</span> equals. We get this from the linear model we are building where <span class="math inline">\(\hat y = X\hat\beta\)</span>.</p>
+<p>The last bit of information we need to start working on this proof that <span class="math inline">\(E[\hat\beta]= \beta\)</span> (OLS estimator is unbiased) is to know that we fit the right model. Assume we did this. The model we are building is <span class="math inline">\(\hat y = X\hat\beta\)</span>.</p>
 <p><span class="math display">\[
 y = X\beta + \epsilon\\
 \text{where, } E[\epsilon]=0
@@ -490,6 +491,8 @@ E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
 &amp; =\beta\\
 E[\hat\beta]&amp; = \beta
 \end{align}\]</span></p>
+<p>Wow, the OLS estimator is unbiased when we fit the correct model! But what happens if we do not fit the correct model? Let’s do another example.</p>
+<p>Say it is true that <span class="math inline">\(y = X\beta + Z\gamma +\epsilon\)</span>, where again <span class="math inline">\(E[\epsilon] = 0\)</span>. Even though this is the truth, we don’t know this. So we instead fit the same model from before: <span class="math inline">\(\hat y = X\hat\beta\)</span>. We use the same <span class="math inline">\(\hat\beta\)</span> derived value from earlier.</p>
 <p><span class="math display">\[\begin{align}
 E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
 &amp; = (X^TX)^{-1}X^T\space E[y]\\
@@ -499,6 +502,11 @@ E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
 &amp; = ((X^TX)^{-1}X^T X\beta) + ((X^TX)^{-1}X^TZ\gamma)\\
 &amp; = \beta + (X^TX)^{-1}X^TZ\gamma
 \end{align}\]</span></p>
+<p>We are done now, but we cannot say the estimator is unbiased as we don’t have <span class="math inline">\(E[\hat\beta]= \beta\)</span>. Instead, we have this extra term of <span class="math inline">\((X^TX)^{-1}X^TZ\gamma\)</span>. This is the bias! So, we failed to adjust for our confounding variable <span class="math inline">\(Z\)</span> and ended up with this bias.</p>
+<p>Here is another thing to think about, what happens if our <span class="math inline">\(y = 0\)</span> or if <span class="math inline">\(X^TZ = 0\)</span>? Here is what this idea looks like in a DAG, but also try proving this like we did together before.</p>
+</div>
+<div id="correlated-data" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Correlated Data<a href="genetic-ancestry.html#correlated-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 
 </div>
 </div>
@@ -509,7 +517,7 @@ E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
         </div>
       </div>
 <a href="genome-wide-association-studies-gwas.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="correlated-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="correlated-data-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
