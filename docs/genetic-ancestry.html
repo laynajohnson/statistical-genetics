@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-03-25" />
+<meta name="date" content="2025-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="genome-wide-association-studies-gwas.html"/>
-<link rel="next" href="last-unit.html"/>
+<link rel="next" href="correlated-data.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -172,7 +172,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="last-unit.html"><a href="last-unit.html"><i class="fa fa-check"></i><b>3</b> Last Unit</a></li>
+<li class="chapter" data-level="3" data-path="correlated-data.html"><a href="correlated-data.html"><i class="fa fa-check"></i><b>3</b> Correlated Data</a></li>
 <li class="chapter" data-level="4" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>4</b> Glossary</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="glossary.html"><a href="glossary.html#unit-1"><i class="fa fa-check"></i><b>4.1</b> Unit 1</a></li>
@@ -386,7 +386,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-8"><a href="genetic-ancestry.html#cb10-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&#39;Principal Component&#39;</span>, <span class="at">y =</span> <span class="st">&#39;Percent of Variance Explained&#39;</span>) <span class="sc">+</span> </span>
 <span id="cb10-9"><a href="genetic-ancestry.html#cb10-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/scree-plot-1.png" width="672" /></p>
-<p>In our plot, we can see that our first PC has the highest proportion of variation compared to the rest. PC1 explains around 15% of the variance and then there is a drop for the rest of the PCs. We mentioned before that our method will have the first PCs explain the most variance, and this holds true for the PCA we ran on our simulated genetic data as well.</p>
+<p>In our plot, we can see that our first PC has the highest proportion of variation compared to the rest. PC1 explains around 16% of the variance and then there is a drop for the rest of the PCs. We mentioned before that our method will have the first PCs explain the most variance, and this holds true for the PCA we ran on our simulated genetic data as well.</p>
+<p>Another thing we can understand from a scree plot is how many PCs are sufficient to capture population structure. From our plot, we can see our first PC captures a lot more variance as compared to PC2-PC20. The drop off in the plot lets us know that PC1 is sufficient and we would not need to adjust for others to correct our analysis for population structure.</p>
 <p><br />
 </p>
 </div>
@@ -411,10 +412,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-13"><a href="genetic-ancestry.html#cb11-13" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fu">log10</span>(p), <span class="at">x =</span> SNP)) <span class="sc">+</span> </span>
 <span id="cb11-14"><a href="genetic-ancestry.html#cb11-14" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
 <span id="cb11-15"><a href="genetic-ancestry.html#cb11-15" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb11-16"><a href="genetic-ancestry.html#cb11-16" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Unadjusted Analysis&#39;</span>)</span></code></pre></div>
+<span id="cb11-16"><a href="genetic-ancestry.html#cb11-16" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">8</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb11-17"><a href="genetic-ancestry.html#cb11-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Unadjusted Analysis&#39;</span>)</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>We see with our plot that our SNP4 does indeed have the smallest p-value. But we also see that our first three SNPs seem significant as well.</p>
-<p>Note: the <span class="math inline">\(-log10(p)\)</span> notation means that we are transforming the visual of our p-value to put more emphasis on those with the lowest values (log scale). You may notice that it is <span class="math inline">\(-log\)</span> which means that on our graph we are looking for the highest value instead of the lowest value for which SNP is most significant. (think of it like <span class="math inline">\((pval)^{-5}\)</span> now looks more like <span class="math inline">\((pval)^5\)</span>).</p>
+<p>We see with our plot that our SNP4 does indeed have the smallest p-value. But we also see that our first three SNPs seem significant as well at around 15 on the <span class="math inline">\(-log10\)</span> scale. The horizontal line on the graph represents the agreed upon “typical” level of significance for a GWAS study.</p>
+<p>Note: the <span class="math inline">\(-log10(p)\)</span> notation means that we are transforming the visual of our p-value (p) to put more emphasis on those with the lowest values (log scale). You may notice that it is <span class="math inline">\(-log\)</span> which means that on our graph we are looking for the highest value instead of the lowest value for which SNP is most significant. (think of it like <span class="math inline">\((p)^{-5}\)</span> now looks more like <span class="math inline">\((p)^5\)</span>).</p>
 <p><strong>Adjusting for PCs</strong></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="genetic-ancestry.html#cb12-1" tabindex="-1"></a><span class="co"># empty vector to store p-values</span></span>
 <span id="cb12-2"><a href="genetic-ancestry.html#cb12-2" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
@@ -432,9 +434,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-14"><a href="genetic-ancestry.html#cb12-14" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">p =</span> pvals, <span class="at">SNP =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb12-15"><a href="genetic-ancestry.html#cb12-15" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fu">log10</span>(p), <span class="at">x =</span> SNP)) <span class="sc">+</span> </span>
 <span id="cb12-16"><a href="genetic-ancestry.html#cb12-16" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb12-17"><a href="genetic-ancestry.html#cb12-17" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb12-18"><a href="genetic-ancestry.html#cb12-18" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Adjusted Analysis&#39;</span>)</span></code></pre></div>
+<span id="cb12-17"><a href="genetic-ancestry.html#cb12-17" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">8</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb12-18"><a href="genetic-ancestry.html#cb12-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb12-19"><a href="genetic-ancestry.html#cb12-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Adjusted Analysis&#39;</span>)</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>After adjusting for our first PC, which explains much of the difference between the two populations, the significance of our first three SNPs goes down. Looking at where the p-values are compared to our reference line, they are below what we would consider significant.</p>
+<p>What could be the reason for the difference between the two models? We will talk about it next.</p>
 <p><br />
 <br />
 </p>
@@ -442,19 +447,58 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="confounding-variables" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Confounding Variables<a href="genetic-ancestry.html#confounding-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A term you may have come across in statistics or statistics related courses is the idea of <em>confounding</em>. In some instances, all you may know about a confounding variable is that you should adjust for it. But what does it mean to adjust for a confounding variable and how do we really know if a variable is confounding or not.</p>
+<p>A term you may have come across in statistics or statistics related courses is the idea of <em>confounding</em>. In some instances, all you may know about a confounding variable is that you should adjust for it. But what does it mean to adjust for a confounding variable and how do we really know if a variable is confounding or not?</p>
+<p>Nearly all genetics studies are observational studies. This means that the researcher simply collects genetic data or uses existing data and views the trends present. Mainly we use observational studies because there are plenty of ethical concerns that come with experimental human genetic studies. Just like you need to be sure to account for different variables in an experiment that can affect your collection and results, you also need to be aware of variables that interact with observational studies.</p>
 <p>A term you may be less familiar is <em>Directed Acyclic Graph</em> (DAG). These are graphs where the edges are directed, or have arrows explaining the direction of how variables are related or “cause” each other. So, if we think of a basic linear model, we can draw a DAG that shows how we think our variables in the model are related.</p>
-<p>INSERT GRAPH DRAWING WITH ONLY X and Y</p>
+<p>INSERT GRAPH DRAWING WITH ONLY genotype and trait</p>
 <p>There are three criteria for confounding to think about when considering variables to add to your model.</p>
 <ol style="list-style-type: decimal">
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> must be associated (“cause”) our predictor <span class="math inline">\(X\)</span>.</p></li>
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> must be associated (“cause”) our outcome <span class="math inline">\(Y\)</span>.</p></li>
-<li><p>Confounding variable <span class="math inline">\(Z\)</span> cannot be on the causal pathway between predictor <span class="math inline">\(X\)</span> and outcome <span class="math inline">\(Y\)</span> (<span class="math inline">\(X\)</span> does not cause <span class="math inline">\(Z\)</span>).</p></li>
+<li><p>Confounding variable <span class="math inline">\(Z\)</span> cannot be on the causal pathway between predictor <span class="math inline">\(X\)</span> and outcome <span class="math inline">\(Y\)</span>.</p></li>
 </ol>
-<p>DRAWING OF ALL THREE CRITERIA</p>
+<p>DRAWING OF ALL THREE CRITERIA WITH genotype, trait, ancestry</p>
 <p>The reason we are talking about <em>confounding</em> at all is because of the <code>population</code> variable. We adjusted for <code>population</code>with our PCA method. It fits all three criteria for the SNPs that we simulated with different MAF between populations</p>
 <div id="omitted-variable-bias" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Omitted Variable Bias<a href="genetic-ancestry.html#omitted-variable-bias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another set of terms you may or may not be familiar with are <em>bias</em> and <em>variance</em>. Bias refers to how far away we are from true value while variance refers to how much our results differ from attempt to attempt.</p>
+<p>INSERT TYPICAL TARGET DRAWING</p>
+<p>When we run ordinary linear regression (<em>OLS</em>), we are finding the <span class="math inline">\(\beta\)</span> coefficients for each variable in our model. So, this means for OLS, our estimator is <span class="math inline">\(\beta\)</span>. <em>An estimator is unbiased if its expected value is equal its true value</em> For OLS this looks like:</p>
+<p><span class="math display">\[
+E[\hat\beta] = \beta
+\]</span></p>
+<p>Lets prove that the OLS estimator is unbiased.</p>
+<p>We want to fit the linear regression model</p>
+<p><span class="math display">\[
+E[y|x] = X\beta
+\]</span></p>
+<p>We can derive the estimator for <span class="math inline">\(\beta\)</span> with some linear algebra (<a href="https://mac-stat.github.io/Stat155Notes/">check here</a> for how we get this)</p>
+<p><span class="math display">\[
+\hat\beta = (X^TX)^{-1}X^Ty
+\]</span></p>
+<p>The last bit of information we need to start working on this proof that <span class="math inline">\(E[\hat\beta]= \beta\)</span> (OLS estimator is unbiased) is what <span class="math inline">\(y\)</span> equals. We get this from the linear model we are building where <span class="math inline">\(\hat y = X\hat\beta\)</span>.</p>
+<p><span class="math display">\[
+y = X\beta + \epsilon\\
+\text{where, } E[\epsilon]=0
+\]</span></p>
+<p>Finally, here is what this proof looks like:</p>
+<p><span class="math display">\[\begin{align}
+E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
+&amp; = (X^TX)^{-1}X^T\space E[y]\\
+&amp; = (X^TX)^{-1}X^T\space E[X\beta + \epsilon]\\
+&amp; = (X^TX)^{-1}X^TX\space \beta \space + \space E[\epsilon]\\
+&amp; =\beta\\
+E[\hat\beta]&amp; = \beta
+\end{align}\]</span></p>
+<p><span class="math display">\[\begin{align}
+E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
+&amp; = (X^TX)^{-1}X^T\space E[y]\\
+&amp; = (X^TX)^{-1}X^T\space E[X\beta + Z\gamma + \epsilon]\\
+&amp; = (X^TX)^{-1}X^T\space (E[X\beta] + E[Z\gamma] + E[\epsilon])\\
+&amp; = (X^TX)^{-1}X^T\space (X\beta + Z\gamma + 0)\\
+&amp; = ((X^TX)^{-1}X^T X\beta) + ((X^TX)^{-1}X^TZ\gamma)\\
+&amp; = \beta + (X^TX)^{-1}X^TZ\gamma
+\end{align}\]</span></p>
 
 </div>
 </div>
@@ -465,7 +509,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="genome-wide-association-studies-gwas.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="last-unit.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="correlated-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

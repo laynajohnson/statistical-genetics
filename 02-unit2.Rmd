@@ -234,7 +234,9 @@ pve %>%
   theme_minimal()
 ```
 
-In our plot, we can see that our first PC has the highest proportion of variation compared to the rest. PC1 explains around 15% of the variance and then there is a drop for the rest of the PCs. We mentioned before that our method will have the first PCs explain the most variance, and this holds true for the PCA we ran on our simulated genetic data as well. 
+In our plot, we can see that our first PC has the highest proportion of variation compared to the rest. PC1 explains around 16% of the variance and then there is a drop for the rest of the PCs. We mentioned before that our method will have the first PCs explain the most variance, and this holds true for the PCA we ran on our simulated genetic data as well. 
+
+Another thing we can understand from a scree plot is how many PCs are sufficient to capture population structure. From our plot, we can see our first PC captures a lot more variance as compared to PC2-PC20. The drop off in the plot lets us know that PC1 is sufficient and we would not need to adjust for others to correct our analysis for population structure.
 
 \
 
@@ -262,12 +264,13 @@ data.frame(p = pvals, SNP = 1:20) %>%
   ggplot(aes(y = -log10(p), x = SNP)) + 
   geom_point() + 
   theme_minimal() + 
+  geom_hline(yintercept=8, color = "firebrick", alpha = 0.5)+
   ggtitle('Unadjusted Analysis')
 ```
 
-We see with our plot that our SNP4 does indeed have the smallest p-value. But we also see that our first three SNPs seem significant as well.
+We see with our plot that our SNP4 does indeed have the smallest p-value. But we also see that our first three SNPs seem significant as well at around 15 on the $-log10$ scale. The horizontal line on the graph represents the agreed upon "typical" level of significance for a GWAS study.
 
-Note: the $-log10(p)$ notation means that we are transforming the visual of our p-value to put more emphasis on those with the lowest values (log scale). You may notice that it is $-log$ which means that on our graph we are looking for the highest value instead of the lowest value for which SNP is most significant. (think of it like $(pval)^{-5}$ now looks more like $(pval)^5$).
+Note: the $-log10(p)$ notation means that we are transforming the visual of our p-value (p) to put more emphasis on those with the lowest values (log scale). You may notice that it is $-log$ which means that on our graph we are looking for the highest value instead of the lowest value for which SNP is most significant. (think of it like $(p)^{-5}$ now looks more like $(p)^5$).
 
 **Adjusting for PCs**
 
@@ -288,21 +291,27 @@ for(i in 1:20){
 data.frame(p = pvals, SNP = 1:20) %>%
   ggplot(aes(y = -log10(p), x = SNP)) + 
   geom_point() + 
+  geom_hline(yintercept=8, color = "firebrick", alpha = 0.5)+
   theme_minimal() + 
   ggtitle('Adjusted Analysis')
 ```
 
+After adjusting for our first PC, which explains much of the difference between the two populations, the significance of our first three SNPs goes down. Looking at where the p-values are compared to our reference line, they are below what we would consider significant.
+
+What could be the reason for the difference between the two models? We will talk about it next.
 
 \
 \
 
 ## Confounding Variables
 
-A term you may have come across in statistics or statistics related courses is the idea of *confounding*. In some instances, all you may know about a confounding variable is that you should adjust for it. But what does it mean to adjust for a confounding variable and how do we really know if a variable is confounding or not.
+A term you may have come across in statistics or statistics related courses is the idea of *confounding*. In some instances, all you may know about a confounding variable is that you should adjust for it. But what does it mean to adjust for a confounding variable and how do we really know if a variable is confounding or not?
+
+Nearly all genetics studies are observational studies. This means that the researcher simply collects genetic data or uses existing data and views the trends present. Mainly we use observational studies because there are plenty of ethical concerns that come with experimental human genetic studies. Just like you need to be sure to account for different variables in an experiment that can affect your collection and results, you also need to be aware of variables that interact with observational studies. 
 
 A term you may be less familiar is *Directed Acyclic Graph* (DAG). These are graphs where the edges are directed, or have arrows explaining the direction of how variables are related or "cause" each other. So, if we think of a basic linear model, we can draw a DAG that shows how we think our variables in the model are related. 
 
-INSERT GRAPH DRAWING WITH ONLY X and Y
+INSERT GRAPH DRAWING WITH ONLY genotype and trait
 
 There are three criteria for confounding to think about when considering variables to add to your model.
 
@@ -310,11 +319,68 @@ There are three criteria for confounding to think about when considering variabl
 
 2. Confounding variable $Z$ must be associated ("cause") our outcome $Y$.
 
-3. Confounding variable $Z$ cannot be on the causal pathway between predictor $X$ and outcome $Y$ ($X$ does not cause $Z$).
+3. Confounding variable $Z$ cannot be on the causal pathway between predictor $X$ and outcome $Y$.
 
-DRAWING OF ALL THREE CRITERIA
+DRAWING OF ALL THREE CRITERIA WITH genotype, trait, ancestry
 
 The reason we are talking about *confounding* at all is because of the `population` variable. We adjusted for `population`with our PCA method. It fits all three criteria for the SNPs that we simulated with different MAF between populations
 
 ### Omitted Variable Bias
+
+Another set of terms you may or may not be familiar with are *bias* and *variance*.  Bias refers to how far away we are from true value while variance refers to how much our results differ from attempt to attempt.
+
+INSERT TYPICAL TARGET DRAWING
+
+When we run ordinary linear regression (*OLS*), we are finding the $\beta$ coefficients for each variable in our model. So, this means for OLS, our estimator is $\beta$. *An estimator is unbiased if its expected value is equal its true value* For OLS this looks like:
+
+$$
+E[\hat\beta] = \beta
+$$
+
+Lets prove that the OLS estimator is unbiased. 
+
+We want to fit the linear regression model
+
+$$
+E[y|x] = X\beta
+$$
+
+We can derive the estimator for $\beta$ with some linear algebra ([check here](https://mac-stat.github.io/Stat155Notes/) for how we get this)
+
+$$
+\hat\beta = (X^TX)^{-1}X^Ty
+$$
+
+The last bit of information we need to start working on this proof that $E[\hat\beta]= \beta$ (OLS estimator is unbiased) is what $y$ equals. We get this from the linear model we are building where $\hat y = X\hat\beta$.
+
+$$
+y = X\beta + \epsilon\\
+\text{where, } E[\epsilon]=0
+$$
+
+Finally, here is what this proof looks like:
+
+\begin{align}
+E[\hat\beta] &= E[(X^TX)^{-1}X^Ty]\\
+& = (X^TX)^{-1}X^T\space E[y]\\
+& = (X^TX)^{-1}X^T\space E[X\beta + \epsilon]\\
+& = (X^TX)^{-1}X^TX\space \beta \space + \space E[\epsilon]\\
+& =\beta\\
+E[\hat\beta]& = \beta
+\end{align}
+
+
+\begin{align}
+E[\hat\beta] &= E[(X^TX)^{-1}X^Ty]\\
+& = (X^TX)^{-1}X^T\space E[y]\\
+& = (X^TX)^{-1}X^T\space E[X\beta + Z\gamma + \epsilon]\\
+& = (X^TX)^{-1}X^T\space (E[X\beta] + E[Z\gamma] + E[\epsilon])\\
+& = (X^TX)^{-1}X^T\space (X\beta + Z\gamma + 0)\\
+& = ((X^TX)^{-1}X^T X\beta) + ((X^TX)^{-1}X^TZ\gamma)\\
+& = \beta + (X^TX)^{-1}X^TZ\gamma
+\end{align}
+
+
+
+
 

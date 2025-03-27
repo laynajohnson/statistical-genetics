@@ -40,8 +40,14 @@ There are many terms that come along with talking about genetic data. The follow
     
     -   [*Score*]{.underline}: the transformed values for individuals along the new PC axes.
     
--   [*Confounding*]{underline.}: 
+-   [*Confounding*]{underline.}: variables we should adjust for as they are causally related to both our predictor and outcome
     
 -   [*Directed Acyclic Graph*]{underline.}: 
+
+-   [*Bias*]{underline.}: tells us how far off target we are
+
+-   [*Variance*]{underline.}: tells us how much our results differ from attempt to attempt
+
+-   [*OLS*]{underline.}: ordinary linear regression
 
 
