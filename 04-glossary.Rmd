@@ -1,6 +1,6 @@
 # Glossary {-}
 
-There are many terms that come along with talking about genetic data. The following are some terms to remember as you read this summary. Refer to this list if you forget what a term means.
+There are many terms that come along with talking about genetic data. The following are some terms to remember as you read this summary. Terms are generally listed in the order which they appear in each unit.
 
 ## Unit 1 {-}
 
@@ -34,7 +34,7 @@ There are many terms that come along with talking about genetic data. The follow
 
     -   [*Population admixture*]{.underline}: the mating of individuals with different geographical/continental origins
     
--   [*Principal Component Analysis*]{.underline}: a method of dimension reduction to keep the most variation from our original data by weighting the variables togehter into new components (PCs).
+-   [*Principal Component Analysis*]{.underline}: a method of dimension reduction to keep the most variation from our original data by weighting the variables together into new components (PCs).
 
     -   [*Loading*]{.underline}: How much of each SNP contributes to a particular PC, the weights.
     
@@ -48,6 +48,6 @@ There are many terms that come along with talking about genetic data. The follow
 
 -   [*Variance*]{.underline}: tells us how much our results differ from attempt to attempt
 
--   [*OLS*]{.underline}: ordinary linear regression
+-   [*OLS*]{.underline}: stands for ordinary least squares. Essentially another name for linear regression
 
 

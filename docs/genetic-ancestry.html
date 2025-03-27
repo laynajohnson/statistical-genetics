@@ -23,7 +23,7 @@
 <meta name="author" content="Alayna Johnson" />
 
 
-<meta name="date" content="2025-03-26" />
+<meta name="date" content="2025-03-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="genome-wide-association-studies-gwas.html"/>
-<link rel="next" href="correlated-data-1.html"/>
+<link rel="next" href="correlated-data.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -170,10 +170,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#confounding-variables"><i class="fa fa-check"></i><b>2.3</b> Confounding Variables</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#omitted-variable-bias"><i class="fa fa-check"></i><b>2.3.1</b> Omitted Variable Bias</a></li>
-<li class="chapter" data-level="2.3.2" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#correlated-data"><i class="fa fa-check"></i><b>2.3.2</b> Correlated Data</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="genetic-ancestry.html"><a href="genetic-ancestry.html#wrapping-up-1"><i class="fa fa-check"></i>Wrapping Up</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="correlated-data-1.html"><a href="correlated-data-1.html"><i class="fa fa-check"></i><b>3</b> Correlated Data</a></li>
+<li class="chapter" data-level="3" data-path="correlated-data.html"><a href="correlated-data.html"><i class="fa fa-check"></i><b>3</b> Correlated Data</a></li>
 <li class="chapter" data-level="" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i>Glossary</a>
 <ul>
 <li class="chapter" data-level="" data-path="glossary.html"><a href="glossary.html#unit-1"><i class="fa fa-check"></i>Unit 1</a></li>
@@ -451,20 +451,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A term you may have come across in statistics or statistics related courses is the idea of <em>confounding</em>. In some instances, all you may know about a confounding variable is that you should adjust for it. But what does it mean to adjust for a confounding variable and how do we really know if a variable is confounding or not?</p>
 <p>Nearly all genetics studies are observational studies. This means that the researcher simply collects genetic data or uses existing data and views the trends present. Mainly we use observational studies because there are plenty of ethical concerns that come with experimental human genetic studies. Just like you need to be sure to account for different variables in an experiment that can affect your collection and results, you also need to be aware of variables that interact with observational studies.</p>
 <p>A term you may be less familiar is <em>Directed Acyclic Graph</em> (DAG). These are graphs where the edges are directed, or have arrows explaining the direction of how variables are related or “cause” each other. So, if we think of a basic linear model, we can draw a DAG that shows how we think our variables in the model are related.</p>
-<p>INSERT GRAPH DRAWING WITH ONLY genotype and trait</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
+<img src="images/DAG-simple.png" alt="*QQ plot example*" width="50%" />
+<p class="caption">
+Figure 2.1: <em>QQ plot example</em>
+</p>
+</div>
 <p>There are three criteria for confounding to think about when considering variables to add to your model.</p>
 <ol style="list-style-type: decimal">
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> must be associated (“cause”) our predictor <span class="math inline">\(X\)</span>.</p></li>
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> must be associated (“cause”) our outcome <span class="math inline">\(Y\)</span>.</p></li>
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> cannot be on the causal pathway between predictor <span class="math inline">\(X\)</span> and outcome <span class="math inline">\(Y\)</span>.</p></li>
 </ol>
-<p>DRAWING OF ALL THREE CRITERIA WITH genotype, trait, ancestry</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
+<img src="images/DAG-confound.png" alt="*QQ plot example*" width="50%" />
+<p class="caption">
+Figure 2.2: <em>QQ plot example</em>
+</p>
+</div>
 <p>The reason we are talking about <em>confounding</em> at all is because of the <code>population</code> variable. We adjusted for <code>population</code>with our PCA method. It fits all three criteria for the SNPs that we simulated with different MAF between populations</p>
 <div id="omitted-variable-bias" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Omitted Variable Bias<a href="genetic-ancestry.html#omitted-variable-bias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another set of terms you may or may not be familiar with are <em>bias</em> and <em>variance</em>. Bias refers to how far away we are from true value while variance refers to how much our results differ from attempt to attempt.</p>
-<p>INSERT TYPICAL TARGET DRAWING</p>
-<p>When we run ordinary linear regression (<em>OLS</em>), we are finding the <span class="math inline">\(\beta\)</span> coefficients for each variable in our model. So, this means for OLS, our estimator is <span class="math inline">\(\beta\)</span>. <em>An estimator is unbiased if its expected value is equal its true value</em> For OLS this looks like:</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<img src="images/bias-variance.png" alt="*QQ plot example*" width="70%" />
+<p class="caption">
+Figure 2.3: <em>QQ plot example</em>
+</p>
+</div>
+<p>When we run linear regression (<em>OLS</em>, ordinary least squares), we are finding the <span class="math inline">\(\beta\)</span> coefficients for each variable in our model. So, this means for OLS, our estimator is <span class="math inline">\(\beta\)</span>. <em>An estimator is unbiased if its expected value is equal its true value</em> For OLS this looks like:</p>
 <p><span class="math display">\[
 E[\hat\beta] = \beta
 \]</span></p>
@@ -503,12 +518,14 @@ E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
 &amp; = \beta + (X^TX)^{-1}X^TZ\gamma
 \end{align}\]</span></p>
 <p>We are done now, but we cannot say the estimator is unbiased as we don’t have <span class="math inline">\(E[\hat\beta]= \beta\)</span>. Instead, we have this extra term of <span class="math inline">\((X^TX)^{-1}X^TZ\gamma\)</span>. This is the bias! So, we failed to adjust for our confounding variable <span class="math inline">\(Z\)</span> and ended up with this bias.</p>
-<p>Here is another thing to think about, what happens if our <span class="math inline">\(y = 0\)</span> or if <span class="math inline">\(X^TZ = 0\)</span>? Here is what this idea looks like in a DAG, but also try proving this like we did together before.</p>
+<p><br />
+</p>
 </div>
-<div id="correlated-data" class="section level3 hasAnchor" number="2.3.2">
-<h3><span class="header-section-number">2.3.2</span> Correlated Data<a href="genetic-ancestry.html#correlated-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="wrapping-up-1" class="section level2 unnumbered hasAnchor">
+<h2>Wrapping Up<a href="genetic-ancestry.html#wrapping-up-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We covered a lot of material in this chapter related to ancestry inference in genetic studies. In the next section we will talk about correlated data, where some of the ideas we talked about here will return.</p>
 
-</div>
 </div>
 </div>
             </section>
@@ -517,7 +534,7 @@ E[\hat\beta] &amp;= E[(X^TX)^{-1}X^Ty]\\
         </div>
       </div>
 <a href="genome-wide-association-studies-gwas.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="correlated-data-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="correlated-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

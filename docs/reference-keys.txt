@@ -23,3 +23,6 @@ glossary
 unit-1
 unit-2
 correlated-data-1
+fig:unnamed-chunk-6
+fig:unnamed-chunk-7
+fig:unnamed-chunk-8

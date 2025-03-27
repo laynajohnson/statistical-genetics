@@ -311,7 +311,9 @@ Nearly all genetics studies are observational studies. This means that the resea
 
 A term you may be less familiar is *Directed Acyclic Graph* (DAG). These are graphs where the edges are directed, or have arrows explaining the direction of how variables are related or "cause" each other. So, if we think of a basic linear model, we can draw a DAG that shows how we think our variables in the model are related. 
 
-INSERT GRAPH DRAWING WITH ONLY genotype and trait
+```{r, fig.cap="*QQ plot example*", out.width="50%", echo=FALSE}
+knitr::include_graphics("images/DAG-simple.png")
+```
 
 There are three criteria for confounding to think about when considering variables to add to your model.
 
@@ -321,7 +323,9 @@ There are three criteria for confounding to think about when considering variabl
 
 3. Confounding variable $Z$ cannot be on the causal pathway between predictor $X$ and outcome $Y$.
 
-DRAWING OF ALL THREE CRITERIA WITH genotype, trait, ancestry
+```{r, fig.cap="*QQ plot example*", out.width="50%", echo=FALSE}
+knitr::include_graphics("images/DAG-confound.png")
+```
 
 The reason we are talking about *confounding* at all is because of the `population` variable. We adjusted for `population`with our PCA method. It fits all three criteria for the SNPs that we simulated with different MAF between populations
 
@@ -329,9 +333,11 @@ The reason we are talking about *confounding* at all is because of the `populati
 
 Another set of terms you may or may not be familiar with are *bias* and *variance*.  Bias refers to how far away we are from true value while variance refers to how much our results differ from attempt to attempt.
 
-INSERT TYPICAL TARGET DRAWING
+```{r, fig.cap="*QQ plot example*", out.width="70%", echo=FALSE}
+knitr::include_graphics("images/bias-variance.png")
+```
 
-When we run ordinary linear regression (*OLS*), we are finding the $\beta$ coefficients for each variable in our model. So, this means for OLS, our estimator is $\beta$. *An estimator is unbiased if its expected value is equal its true value* For OLS this looks like:
+When we run linear regression (*OLS*, ordinary least squares), we are finding the $\beta$ coefficients for each variable in our model. So, this means for OLS, our estimator is $\beta$. *An estimator is unbiased if its expected value is equal its true value* For OLS this looks like:
 
 $$
 E[\hat\beta] = \beta
@@ -386,9 +392,13 @@ E[\hat\beta] &= E[(X^TX)^{-1}X^Ty]\\
 
 We are done now, but we cannot say the estimator is unbiased as we don't have $E[\hat\beta]= \beta$. Instead, we have this extra term of $(X^TX)^{-1}X^TZ\gamma$. This is the bias! So, we failed to adjust for our confounding variable $Z$ and ended up with this bias. 
 
-Here is another thing to think about, what happens if our $y = 0$ or if $X^TZ = 0$? Here is what this idea looks like in a DAG, but also try proving this like we did together before.
+\
 
-### Correlated Data
+## Wrapping Up {-}
+
+We covered a lot of material in this chapter related to ancestry inference in genetic studies. In the next section we will talk about correlated data, where some of the ideas we talked about here will return.
+
+
 
 
 
