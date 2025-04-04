@@ -271,121 +271,124 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">2.2.1</span> Genetic Data PCA<a href="genetic-ancestry.html#genetic-data-pca" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We can use PCA with genetic data in order to correct for stratification from things like population (which is what we will be looking at with an example below). Say there is some set of SNPs that have very different <em>MAF</em> between populations. These features are most likely correlated to each other and stratify the data by representing the difference between populations and will contribute most to the top PCs.</p>
 <p>Let’s simulate some genetic data to run PCA on and break down some of the concepts briefly mentioned above. We will use some similar simulation code to the last chapter on GWAS.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="genetic-ancestry.html#cb1-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="genetic-ancestry.html#cb1-2" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
-<span id="cb1-3"><a href="genetic-ancestry.html#cb1-3" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="genetic-ancestry.html#cb11-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href="genetic-ancestry.html#cb11-2" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb11-3"><a href="genetic-ancestry.html#cb11-3" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code></pre></div>
 <p><strong>Simulating data</strong></p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="genetic-ancestry.html#cb2-1" tabindex="-1"></a><span class="co"># simulate a genetic variant with freq. depending on which population the person belongs to</span></span>
-<span id="cb2-2"><a href="genetic-ancestry.html#cb2-2" tabindex="-1"></a>sim_data_onevar <span class="ot">&lt;-</span> <span class="cf">function</span>(pop, maf){</span>
-<span id="cb2-3"><a href="genetic-ancestry.html#cb2-3" tabindex="-1"></a>  snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="fu">length</span>(pop), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> maf[pop])</span>
-<span id="cb2-4"><a href="genetic-ancestry.html#cb2-4" tabindex="-1"></a>  <span class="fu">return</span>(snp)</span>
-<span id="cb2-5"><a href="genetic-ancestry.html#cb2-5" tabindex="-1"></a>}</span>
-<span id="cb2-6"><a href="genetic-ancestry.html#cb2-6" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="genetic-ancestry.html#cb2-7" tabindex="-1"></a><span class="co"># create dataset with two types of SNPs</span></span>
-<span id="cb2-8"><a href="genetic-ancestry.html#cb2-8" tabindex="-1"></a>popidx <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each =</span> <span class="dv">400</span>)</span>
-<span id="cb2-9"><a href="genetic-ancestry.html#cb2-9" tabindex="-1"></a>maf1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>) <span class="co"># type 1: non-existent in pop 1, frequent in pop2 (different btwn pops)</span></span>
-<span id="cb2-10"><a href="genetic-ancestry.html#cb2-10" tabindex="-1"></a>maf2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.3</span>) <span class="co"># type 2: higher frequency in pop 1 and lower in pop 2 (different btwn pops)</span></span>
-<span id="cb2-11"><a href="genetic-ancestry.html#cb2-11" tabindex="-1"></a>maf3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.11</span>) <span class="co"># type 3: similar freq in pops 1 and 2</span></span>
-<span id="cb2-12"><a href="genetic-ancestry.html#cb2-12" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="genetic-ancestry.html#cb2-13" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="genetic-ancestry.html#cb2-14" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>)</span>
-<span id="cb2-15"><a href="genetic-ancestry.html#cb2-15" tabindex="-1"></a><span class="co"># arguments include number of snps to create, and the population and maf for each pop we created before</span></span>
-<span id="cb2-16"><a href="genetic-ancestry.html#cb2-16" tabindex="-1"></a>snps1 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">3</span>, <span class="fu">sim_data_onevar</span>(<span class="at">pop =</span> popidx, <span class="at">maf =</span> maf1)) </span>
-<span id="cb2-17"><a href="genetic-ancestry.html#cb2-17" tabindex="-1"></a>snps2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4</span>, <span class="fu">sim_data_onevar</span>(<span class="at">pop =</span> popidx, <span class="at">maf =</span> maf2)) </span>
-<span id="cb2-18"><a href="genetic-ancestry.html#cb2-18" tabindex="-1"></a>snps3 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">13</span>, <span class="fu">sim_data_onevar</span>(<span class="at">pop =</span> popidx, <span class="at">maf =</span> maf3))</span>
-<span id="cb2-19"><a href="genetic-ancestry.html#cb2-19" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="genetic-ancestry.html#cb2-20" tabindex="-1"></a>pcadata <span class="ot">&lt;-</span> <span class="fu">cbind</span>(popidx, snps1, snps2, snps3) <span class="sc">%&gt;%</span></span>
-<span id="cb2-21"><a href="genetic-ancestry.html#cb2-21" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
-<span id="cb2-22"><a href="genetic-ancestry.html#cb2-22" tabindex="-1"></a><span class="fu">names</span>(pcadata) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;population&#39;</span>, <span class="fu">paste0</span>(<span class="st">&#39;SNP&#39;</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="fu">ncol</span>(pcadata)<span class="sc">-</span><span class="dv">1</span>)))</span>
-<span id="cb2-23"><a href="genetic-ancestry.html#cb2-23" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="genetic-ancestry.html#cb2-24" tabindex="-1"></a><span class="co"># simulating a trait on snp 4 in our data</span></span>
-<span id="cb2-25"><a href="genetic-ancestry.html#cb2-25" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">800</span> <span class="co"># number of individuals </span></span>
-<span id="cb2-26"><a href="genetic-ancestry.html#cb2-26" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pcadata[,<span class="st">&#39;SNP4&#39;</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># y = 2 * x + e</span></span>
-<span id="cb2-27"><a href="genetic-ancestry.html#cb2-27" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="genetic-ancestry.html#cb2-28" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(trait) </span>
-<span id="cb2-29"><a href="genetic-ancestry.html#cb2-29" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="genetic-ancestry.html#cb2-30" tabindex="-1"></a><span class="co"># joining snps and trait</span></span>
-<span id="cb2-31"><a href="genetic-ancestry.html#cb2-31" tabindex="-1"></a>pcadata <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(trait, pcadata))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="genetic-ancestry.html#cb12-1" tabindex="-1"></a><span class="co"># simulate a genetic variant with freq. depending on which population the person belongs to</span></span>
+<span id="cb12-2"><a href="genetic-ancestry.html#cb12-2" tabindex="-1"></a>sim_data_onevar <span class="ot">&lt;-</span> <span class="cf">function</span>(pop, maf){</span>
+<span id="cb12-3"><a href="genetic-ancestry.html#cb12-3" tabindex="-1"></a>  snp <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="fu">length</span>(pop), <span class="at">size =</span> <span class="dv">2</span>, <span class="at">p =</span> maf[pop])</span>
+<span id="cb12-4"><a href="genetic-ancestry.html#cb12-4" tabindex="-1"></a>  <span class="fu">return</span>(snp)</span>
+<span id="cb12-5"><a href="genetic-ancestry.html#cb12-5" tabindex="-1"></a>}</span>
+<span id="cb12-6"><a href="genetic-ancestry.html#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="genetic-ancestry.html#cb12-7" tabindex="-1"></a><span class="co"># create dataset with two types of SNPs</span></span>
+<span id="cb12-8"><a href="genetic-ancestry.html#cb12-8" tabindex="-1"></a>popidx <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">each =</span> <span class="dv">400</span>)</span>
+<span id="cb12-9"><a href="genetic-ancestry.html#cb12-9" tabindex="-1"></a>maf1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>) <span class="co"># type 1: non-existent in pop 1, frequent in pop2 (different btwn pops)</span></span>
+<span id="cb12-10"><a href="genetic-ancestry.html#cb12-10" tabindex="-1"></a>maf2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.3</span>) <span class="co"># type 2: higher frequency in pop 1 and lower in pop 2 (different btwn pops)</span></span>
+<span id="cb12-11"><a href="genetic-ancestry.html#cb12-11" tabindex="-1"></a>maf3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.11</span>) <span class="co"># type 3: similar freq in pops 1 and 2</span></span>
+<span id="cb12-12"><a href="genetic-ancestry.html#cb12-12" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="genetic-ancestry.html#cb12-13" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="genetic-ancestry.html#cb12-14" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>)</span>
+<span id="cb12-15"><a href="genetic-ancestry.html#cb12-15" tabindex="-1"></a><span class="co"># arguments include number of snps to create, and the population and maf for each pop we created before</span></span>
+<span id="cb12-16"><a href="genetic-ancestry.html#cb12-16" tabindex="-1"></a>snps1 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">3</span>, <span class="fu">sim_data_onevar</span>(<span class="at">pop =</span> popidx, <span class="at">maf =</span> maf1)) </span>
+<span id="cb12-17"><a href="genetic-ancestry.html#cb12-17" tabindex="-1"></a>snps2 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4</span>, <span class="fu">sim_data_onevar</span>(<span class="at">pop =</span> popidx, <span class="at">maf =</span> maf2)) </span>
+<span id="cb12-18"><a href="genetic-ancestry.html#cb12-18" tabindex="-1"></a>snps3 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">13</span>, <span class="fu">sim_data_onevar</span>(<span class="at">pop =</span> popidx, <span class="at">maf =</span> maf3))</span>
+<span id="cb12-19"><a href="genetic-ancestry.html#cb12-19" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="genetic-ancestry.html#cb12-20" tabindex="-1"></a>pcadata <span class="ot">&lt;-</span> <span class="fu">cbind</span>(popidx, snps1, snps2, snps3) <span class="sc">%&gt;%</span></span>
+<span id="cb12-21"><a href="genetic-ancestry.html#cb12-21" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb12-22"><a href="genetic-ancestry.html#cb12-22" tabindex="-1"></a><span class="fu">names</span>(pcadata) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;population&#39;</span>, <span class="fu">paste0</span>(<span class="st">&#39;SNP&#39;</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="fu">ncol</span>(pcadata)<span class="sc">-</span><span class="dv">1</span>)))</span>
+<span id="cb12-23"><a href="genetic-ancestry.html#cb12-23" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="genetic-ancestry.html#cb12-24" tabindex="-1"></a><span class="co"># simulating a trait on snp 4 in our data</span></span>
+<span id="cb12-25"><a href="genetic-ancestry.html#cb12-25" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">800</span> <span class="co"># number of individuals </span></span>
+<span id="cb12-26"><a href="genetic-ancestry.html#cb12-26" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> pcadata[,<span class="st">&#39;SNP4&#39;</span>] <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="co"># y = 2 * x + e</span></span>
+<span id="cb12-27"><a href="genetic-ancestry.html#cb12-27" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="genetic-ancestry.html#cb12-28" tabindex="-1"></a>trait <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(trait) </span>
+<span id="cb12-29"><a href="genetic-ancestry.html#cb12-29" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="genetic-ancestry.html#cb12-30" tabindex="-1"></a><span class="co"># joining snps and trait</span></span>
+<span id="cb12-31"><a href="genetic-ancestry.html#cb12-31" tabindex="-1"></a>pcadata <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(trait, pcadata))</span></code></pre></div>
 <p>Calculating the MAF for each SNP in our data summarized by population. We create a function that will add the minor alleles and divide by 2x the number of people we have in the data.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="genetic-ancestry.html#cb3-1" tabindex="-1"></a>get_MAF <span class="ot">&lt;-</span> <span class="cf">function</span>(snp){</span>
-<span id="cb3-2"><a href="genetic-ancestry.html#cb3-2" tabindex="-1"></a>  <span class="fu">sum</span>(snp)<span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span><span class="fu">length</span>(snp))</span>
-<span id="cb3-3"><a href="genetic-ancestry.html#cb3-3" tabindex="-1"></a>}</span>
-<span id="cb3-4"><a href="genetic-ancestry.html#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="genetic-ancestry.html#cb3-5" tabindex="-1"></a><span class="co"># get observed allele frequency for each population</span></span>
-<span id="cb3-6"><a href="genetic-ancestry.html#cb3-6" tabindex="-1"></a>pcadata <span class="sc">%&gt;%</span></span>
-<span id="cb3-7"><a href="genetic-ancestry.html#cb3-7" tabindex="-1"></a>  <span class="fu">group_by</span>(population) <span class="sc">%&gt;%</span></span>
-<span id="cb3-8"><a href="genetic-ancestry.html#cb3-8" tabindex="-1"></a>  <span class="fu">summarize_all</span>(get_MAF)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="genetic-ancestry.html#cb13-1" tabindex="-1"></a>get_MAF <span class="ot">&lt;-</span> <span class="cf">function</span>(snp){</span>
+<span id="cb13-2"><a href="genetic-ancestry.html#cb13-2" tabindex="-1"></a>  <span class="fu">sum</span>(snp)<span class="sc">/</span>(<span class="dv">2</span><span class="sc">*</span><span class="fu">length</span>(snp))</span>
+<span id="cb13-3"><a href="genetic-ancestry.html#cb13-3" tabindex="-1"></a>}</span>
+<span id="cb13-4"><a href="genetic-ancestry.html#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="genetic-ancestry.html#cb13-5" tabindex="-1"></a><span class="co"># get observed allele frequency for each population</span></span>
+<span id="cb13-6"><a href="genetic-ancestry.html#cb13-6" tabindex="-1"></a>pcadata <span class="sc">%&gt;%</span></span>
+<span id="cb13-7"><a href="genetic-ancestry.html#cb13-7" tabindex="-1"></a>  <span class="fu">group_by</span>(population) <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="genetic-ancestry.html#cb13-8" tabindex="-1"></a>  <span class="fu">summarize_all</span>(get_MAF)</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 22
-##   population trait  SNP1  SNP2  SNP3  SNP4  SNP5  SNP6  SNP7   SNP8   SNP9
-##        &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1          1 1.03  0     0     0     0.515 0.494 0.536  0.52 0.0875 0.0925
-## 2          2 0.560 0.811 0.785 0.821 0.286 0.281 0.29   0.3  0.102  0.102 
-## # ℹ 11 more variables: SNP10 &lt;dbl&gt;, SNP11 &lt;dbl&gt;, SNP12 &lt;dbl&gt;, SNP13 &lt;dbl&gt;,
-## #   SNP14 &lt;dbl&gt;, SNP15 &lt;dbl&gt;, SNP16 &lt;dbl&gt;, SNP17 &lt;dbl&gt;, SNP18 &lt;dbl&gt;,
-## #   SNP19 &lt;dbl&gt;, SNP20 &lt;dbl&gt;</code></pre>
+##   population trait  SNP1  SNP2  SNP3  SNP4
+##        &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1          1 1.03  0     0     0     0.515
+## 2          2 0.560 0.811 0.785 0.821 0.286
+## # ℹ 16 more variables: SNP5 &lt;dbl&gt;,
+## #   SNP6 &lt;dbl&gt;, SNP7 &lt;dbl&gt;, SNP8 &lt;dbl&gt;,
+## #   SNP9 &lt;dbl&gt;, SNP10 &lt;dbl&gt;, SNP11 &lt;dbl&gt;,
+## #   SNP12 &lt;dbl&gt;, SNP13 &lt;dbl&gt;, SNP14 &lt;dbl&gt;,
+## #   SNP15 &lt;dbl&gt;, SNP16 &lt;dbl&gt;, SNP17 &lt;dbl&gt;,
+## #   SNP18 &lt;dbl&gt;, SNP19 &lt;dbl&gt;, SNP20 &lt;dbl&gt;</code></pre>
 <p>In order to run PCA, we need to have only the genotype information from our data. This means removing the <code>population</code> and <code>trait</code> variables. Then we will perform PCA on our remaining data.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="genetic-ancestry.html#cb5-1" tabindex="-1"></a>genotype <span class="ot">&lt;-</span> pcadata <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="genetic-ancestry.html#cb5-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>population, <span class="sc">-</span>trait)</span>
-<span id="cb5-3"><a href="genetic-ancestry.html#cb5-3" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="genetic-ancestry.html#cb5-4" tabindex="-1"></a><span class="co"># performing pca</span></span>
-<span id="cb5-5"><a href="genetic-ancestry.html#cb5-5" tabindex="-1"></a>pca_out <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(genotype, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-6"><a href="genetic-ancestry.html#cb5-6" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="genetic-ancestry.html#cb5-7" tabindex="-1"></a><span class="co"># storing loadings and scores from pca</span></span>
-<span id="cb5-8"><a href="genetic-ancestry.html#cb5-8" tabindex="-1"></a>pca_loadings <span class="ot">&lt;-</span> pca_out<span class="sc">$</span>rotation</span>
-<span id="cb5-9"><a href="genetic-ancestry.html#cb5-9" tabindex="-1"></a>pca_scores <span class="ot">&lt;-</span> pca_out<span class="sc">$</span>x</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="genetic-ancestry.html#cb15-1" tabindex="-1"></a>genotype <span class="ot">&lt;-</span> pcadata <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="genetic-ancestry.html#cb15-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>population, <span class="sc">-</span>trait)</span>
+<span id="cb15-3"><a href="genetic-ancestry.html#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="genetic-ancestry.html#cb15-4" tabindex="-1"></a><span class="co"># performing pca</span></span>
+<span id="cb15-5"><a href="genetic-ancestry.html#cb15-5" tabindex="-1"></a>pca_out <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(genotype, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-6"><a href="genetic-ancestry.html#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="genetic-ancestry.html#cb15-7" tabindex="-1"></a><span class="co"># storing loadings and scores from pca</span></span>
+<span id="cb15-8"><a href="genetic-ancestry.html#cb15-8" tabindex="-1"></a>pca_loadings <span class="ot">&lt;-</span> pca_out<span class="sc">$</span>rotation</span>
+<span id="cb15-9"><a href="genetic-ancestry.html#cb15-9" tabindex="-1"></a>pca_scores <span class="ot">&lt;-</span> pca_out<span class="sc">$</span>x</span></code></pre></div>
 <p><br />
 </p>
 <div id="visualizing-pca" class="section level4 unnumbered hasAnchor">
 <h4>Visualizing PCA<a href="genetic-ancestry.html#visualizing-pca" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Let’s take a look at what the components of our PCs look like.</p>
 <p><strong>Score Plot</strong></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="genetic-ancestry.html#cb6-1" tabindex="-1"></a>pca_scores <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="genetic-ancestry.html#cb6-2" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="co"># convert pca_scores into a data frame for plotting</span></span>
-<span id="cb6-3"><a href="genetic-ancestry.html#cb6-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">population =</span> <span class="fu">as.factor</span>(pcadata<span class="sc">$</span>population)) <span class="sc">%&gt;%</span>  <span class="co"># add the population labels</span></span>
-<span id="cb6-4"><a href="genetic-ancestry.html#cb6-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> population)) <span class="sc">+</span> <span class="co"># then plot</span></span>
-<span id="cb6-5"><a href="genetic-ancestry.html#cb6-5" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb6-6"><a href="genetic-ancestry.html#cb6-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb6-7"><a href="genetic-ancestry.html#cb6-7" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">&#39;Dark2&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="genetic-ancestry.html#cb16-1" tabindex="-1"></a>pca_scores <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="genetic-ancestry.html#cb16-2" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> <span class="co"># convert pca_scores into a data frame for plotting</span></span>
+<span id="cb16-3"><a href="genetic-ancestry.html#cb16-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">population =</span> <span class="fu">as.factor</span>(pcadata<span class="sc">$</span>population)) <span class="sc">%&gt;%</span>  <span class="co"># add the population labels</span></span>
+<span id="cb16-4"><a href="genetic-ancestry.html#cb16-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> population)) <span class="sc">+</span> <span class="co"># then plot</span></span>
+<span id="cb16-5"><a href="genetic-ancestry.html#cb16-5" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb16-6"><a href="genetic-ancestry.html#cb16-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb16-7"><a href="genetic-ancestry.html#cb16-7" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">&#39;Dark2&#39;</span>)</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/score-plot-1.png" width="672" /></p>
 <p>The scores above represent the new values for the individuals in our study along the PC1 and PC2 axes. In our plot, we colored the points by population. Before we performed PCA, we took out our population variable, yet this graph shows how our data is still separated into two populations through this method.</p>
 <p>We can also use a kind of visualization called parallel coordinates plot. This plot is another way to view how the PCs capture our populations by showing the scores for all PCs at one time. As we learned from our score plot, we see PC1 and PC2 capture population membership, while later PCs do not.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="genetic-ancestry.html#cb7-1" tabindex="-1"></a><span class="co"># parallel coordinates plot</span></span>
-<span id="cb7-2"><a href="genetic-ancestry.html#cb7-2" tabindex="-1"></a>pca_scores <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="genetic-ancestry.html#cb7-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="genetic-ancestry.html#cb7-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">population =</span> <span class="fu">as.factor</span>(pcadata<span class="sc">$</span>population)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-5"><a href="genetic-ancestry.html#cb7-5" tabindex="-1"></a>  <span class="fu">ggparcoord</span>(<span class="at">columns =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">groupColumn =</span> <span class="st">&#39;population&#39;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
-<span id="cb7-6"><a href="genetic-ancestry.html#cb7-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb7-7"><a href="genetic-ancestry.html#cb7-7" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">&#39;Dark2&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="genetic-ancestry.html#cb17-1" tabindex="-1"></a><span class="co"># parallel coordinates plot</span></span>
+<span id="cb17-2"><a href="genetic-ancestry.html#cb17-2" tabindex="-1"></a>pca_scores <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="genetic-ancestry.html#cb17-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="genetic-ancestry.html#cb17-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">population =</span> <span class="fu">as.factor</span>(pcadata<span class="sc">$</span>population)) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-5"><a href="genetic-ancestry.html#cb17-5" tabindex="-1"></a>  <span class="fu">ggparcoord</span>(<span class="at">columns =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="at">groupColumn =</span> <span class="st">&#39;population&#39;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span> </span>
+<span id="cb17-6"><a href="genetic-ancestry.html#cb17-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb17-7"><a href="genetic-ancestry.html#cb17-7" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">&#39;Dark2&#39;</span>)</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/parallel-coords-plot-1.png" width="672" /></p>
 <p>Remembering from before, <em>loadings</em> show us how much each SNP contributes to a PC. We can view this PC by PC. We will look at plots for for PC1 to PC4.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="genetic-ancestry.html#cb8-1" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
-<span id="cb8-2"><a href="genetic-ancestry.html#cb8-2" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="genetic-ancestry.html#cb8-3" tabindex="-1"></a>pca_loadings[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="genetic-ancestry.html#cb8-4" tabindex="-1"></a>  <span class="fu">melt</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a href="genetic-ancestry.html#cb8-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Var1, <span class="at">y =</span> value, <span class="at">fill =</span> Var1)) <span class="sc">+</span></span>
-<span id="cb8-6"><a href="genetic-ancestry.html#cb8-6" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="genetic-ancestry.html#cb8-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Var2) <span class="sc">+</span> </span>
-<span id="cb8-8"><a href="genetic-ancestry.html#cb8-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;loadings&quot;</span>, <span class="at">x =</span> <span class="st">&quot;original features&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;original features&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-9"><a href="genetic-ancestry.html#cb8-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb8-10"><a href="genetic-ancestry.html#cb8-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="genetic-ancestry.html#cb18-1" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb18-2"><a href="genetic-ancestry.html#cb18-2" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="genetic-ancestry.html#cb18-3" tabindex="-1"></a>pca_loadings[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>] <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="genetic-ancestry.html#cb18-4" tabindex="-1"></a>  <span class="fu">melt</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb18-5"><a href="genetic-ancestry.html#cb18-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Var1, <span class="at">y =</span> value, <span class="at">fill =</span> Var1)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="genetic-ancestry.html#cb18-6" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="genetic-ancestry.html#cb18-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Var2) <span class="sc">+</span> </span>
+<span id="cb18-8"><a href="genetic-ancestry.html#cb18-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;loadings&quot;</span>, <span class="at">x =</span> <span class="st">&quot;original features&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;original features&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="genetic-ancestry.html#cb18-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-10"><a href="genetic-ancestry.html#cb18-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/loadings-plot-1.png" width="672" />
 <strong>Scree plot</strong></p>
 <p>When we explained what PCA is, we mentioned this idea that we are performing dimension reduction to be left with components that explain the most variation in our data. We also have a way of visualizing the proportion of variance explained by each PC. The plot we will make is called a <em>scree plot</em>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="genetic-ancestry.html#cb9-1" tabindex="-1"></a><span class="co"># extract variance of each PC</span></span>
-<span id="cb9-2"><a href="genetic-ancestry.html#cb9-2" tabindex="-1"></a>pca_var <span class="ot">&lt;-</span> (pca_out<span class="sc">$</span>sdev)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb9-3"><a href="genetic-ancestry.html#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="genetic-ancestry.html#cb9-4" tabindex="-1"></a><span class="co"># calculate proportion of variance explained</span></span>
-<span id="cb9-5"><a href="genetic-ancestry.html#cb9-5" tabindex="-1"></a>total_var <span class="ot">&lt;-</span> <span class="fu">sum</span>(pca_var)</span>
-<span id="cb9-6"><a href="genetic-ancestry.html#cb9-6" tabindex="-1"></a>pve <span class="ot">&lt;-</span> pca_var<span class="sc">/</span>total_var</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="genetic-ancestry.html#cb10-1" tabindex="-1"></a><span class="co"># creating scree plot</span></span>
-<span id="cb10-2"><a href="genetic-ancestry.html#cb10-2" tabindex="-1"></a>pve <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="genetic-ancestry.html#cb10-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="genetic-ancestry.html#cb10-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">index =</span> <span class="fu">seq_len</span>(<span class="fu">length</span>(pca_var))) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="genetic-ancestry.html#cb10-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> pve)) <span class="sc">+</span> </span>
-<span id="cb10-6"><a href="genetic-ancestry.html#cb10-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb10-7"><a href="genetic-ancestry.html#cb10-7" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb10-8"><a href="genetic-ancestry.html#cb10-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&#39;Principal Component&#39;</span>, <span class="at">y =</span> <span class="st">&#39;Percent of Variance Explained&#39;</span>) <span class="sc">+</span> </span>
-<span id="cb10-9"><a href="genetic-ancestry.html#cb10-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="genetic-ancestry.html#cb19-1" tabindex="-1"></a><span class="co"># extract variance of each PC</span></span>
+<span id="cb19-2"><a href="genetic-ancestry.html#cb19-2" tabindex="-1"></a>pca_var <span class="ot">&lt;-</span> (pca_out<span class="sc">$</span>sdev)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb19-3"><a href="genetic-ancestry.html#cb19-3" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="genetic-ancestry.html#cb19-4" tabindex="-1"></a><span class="co"># calculate proportion of variance explained</span></span>
+<span id="cb19-5"><a href="genetic-ancestry.html#cb19-5" tabindex="-1"></a>total_var <span class="ot">&lt;-</span> <span class="fu">sum</span>(pca_var)</span>
+<span id="cb19-6"><a href="genetic-ancestry.html#cb19-6" tabindex="-1"></a>pve <span class="ot">&lt;-</span> pca_var<span class="sc">/</span>total_var</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="genetic-ancestry.html#cb20-1" tabindex="-1"></a><span class="co"># creating scree plot</span></span>
+<span id="cb20-2"><a href="genetic-ancestry.html#cb20-2" tabindex="-1"></a>pve <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="genetic-ancestry.html#cb20-3" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="genetic-ancestry.html#cb20-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">index =</span> <span class="fu">seq_len</span>(<span class="fu">length</span>(pca_var))) <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="genetic-ancestry.html#cb20-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> index, <span class="at">y =</span> pve)) <span class="sc">+</span> </span>
+<span id="cb20-6"><a href="genetic-ancestry.html#cb20-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb20-7"><a href="genetic-ancestry.html#cb20-7" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb20-8"><a href="genetic-ancestry.html#cb20-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&#39;Principal Component&#39;</span>, <span class="at">y =</span> <span class="st">&#39;Percent of Variance Explained&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb20-9"><a href="genetic-ancestry.html#cb20-9" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
 <p><img src="bookdownproj_files/figure-html/scree-plot-1.png" width="672" /></p>
 <p>In our plot, we can see that our first PC has the highest proportion of variation compared to the rest. PC1 explains around 16% of the variance and then there is a drop for the rest of the PCs. We mentioned before that our method will have the first PCs explain the most variance, and this holds true for the PCA we ran on our simulated genetic data as well.</p>
 <p>Another thing we can understand from a scree plot is how many PCs are sufficient to capture population structure. From our plot, we can see our first PC captures a lot more variance as compared to PC2-PC20. The drop off in the plot lets us know that PC1 is sufficient and we would not need to adjust for others to correct our analysis for population structure.</p>
@@ -398,47 +401,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In the last chapter, we did not run GWAS on our simulated chapter. With this chapter, we will get to see what this looks like in practice.</p>
 <p><strong>Before adjusting for PCs</strong></p>
 <p>With this first GWAS example, we provide code that looks like just a normal GWAS where we use <em>marginal regression</em> for each of our 20 SNPs on the trait we simulated. What we would want to see is that the most significant SNP in predicting our trait is the one we simulated the trait on (SNP4).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="genetic-ancestry.html#cb11-1" tabindex="-1"></a><span class="co"># empty vector to store p-values</span></span>
-<span id="cb11-2"><a href="genetic-ancestry.html#cb11-2" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb11-3"><a href="genetic-ancestry.html#cb11-3" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="genetic-ancestry.html#cb11-4" tabindex="-1"></a><span class="co"># loop through the 20 SNPs</span></span>
-<span id="cb11-5"><a href="genetic-ancestry.html#cb11-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>){</span>
-<span id="cb11-6"><a href="genetic-ancestry.html#cb11-6" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> pcadata <span class="sc">%&gt;%</span> <span class="fu">select</span>(trait, <span class="fu">paste0</span>(<span class="st">&#39;SNP&#39;</span>,i)) <span class="co"># pull out just the trait and SNP of interest</span></span>
-<span id="cb11-7"><a href="genetic-ancestry.html#cb11-7" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(trait <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="co"># regress trait on everything else (.), which is just SNP i in this case</span></span>
-<span id="cb11-8"><a href="genetic-ancestry.html#cb11-8" tabindex="-1"></a>  pvals[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>coef[<span class="dv">2</span>,<span class="dv">4</span>] <span class="co"># pull out the p-value for the slope</span></span>
-<span id="cb11-9"><a href="genetic-ancestry.html#cb11-9" tabindex="-1"></a>}</span>
-<span id="cb11-10"><a href="genetic-ancestry.html#cb11-10" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="genetic-ancestry.html#cb11-11" tabindex="-1"></a><span class="co"># plot -log10 pvalues</span></span>
-<span id="cb11-12"><a href="genetic-ancestry.html#cb11-12" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">p =</span> pvals, <span class="at">SNP =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-13"><a href="genetic-ancestry.html#cb11-13" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fu">log10</span>(p), <span class="at">x =</span> SNP)) <span class="sc">+</span> </span>
-<span id="cb11-14"><a href="genetic-ancestry.html#cb11-14" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb11-15"><a href="genetic-ancestry.html#cb11-15" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb11-16"><a href="genetic-ancestry.html#cb11-16" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">8</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb11-17"><a href="genetic-ancestry.html#cb11-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Unadjusted Analysis&#39;</span>)</span></code></pre></div>
-<p><img src="bookdownproj_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="genetic-ancestry.html#cb21-1" tabindex="-1"></a><span class="co"># empty vector to store p-values</span></span>
+<span id="cb21-2"><a href="genetic-ancestry.html#cb21-2" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb21-3"><a href="genetic-ancestry.html#cb21-3" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="genetic-ancestry.html#cb21-4" tabindex="-1"></a><span class="co"># loop through the 20 SNPs</span></span>
+<span id="cb21-5"><a href="genetic-ancestry.html#cb21-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>){</span>
+<span id="cb21-6"><a href="genetic-ancestry.html#cb21-6" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> pcadata <span class="sc">%&gt;%</span> <span class="fu">select</span>(trait, <span class="fu">paste0</span>(<span class="st">&#39;SNP&#39;</span>,i)) <span class="co"># pull out just the trait and SNP of interest</span></span>
+<span id="cb21-7"><a href="genetic-ancestry.html#cb21-7" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(trait <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="co"># regress trait on everything else (.), which is just SNP i in this case</span></span>
+<span id="cb21-8"><a href="genetic-ancestry.html#cb21-8" tabindex="-1"></a>  pvals[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>coef[<span class="dv">2</span>,<span class="dv">4</span>] <span class="co"># pull out the p-value for the slope</span></span>
+<span id="cb21-9"><a href="genetic-ancestry.html#cb21-9" tabindex="-1"></a>}</span>
+<span id="cb21-10"><a href="genetic-ancestry.html#cb21-10" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="genetic-ancestry.html#cb21-11" tabindex="-1"></a><span class="co"># plot -log10 pvalues</span></span>
+<span id="cb21-12"><a href="genetic-ancestry.html#cb21-12" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">p =</span> pvals, <span class="at">SNP =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-13"><a href="genetic-ancestry.html#cb21-13" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fu">log10</span>(p), <span class="at">x =</span> SNP)) <span class="sc">+</span> </span>
+<span id="cb21-14"><a href="genetic-ancestry.html#cb21-14" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb21-15"><a href="genetic-ancestry.html#cb21-15" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb21-16"><a href="genetic-ancestry.html#cb21-16" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">8</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb21-17"><a href="genetic-ancestry.html#cb21-17" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Unadjusted Analysis&#39;</span>)</span></code></pre></div>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>We see with our plot that our SNP4 does indeed have the smallest p-value. But we also see that our first three SNPs seem significant as well at around 15 on the <span class="math inline">\(-log10\)</span> scale. The horizontal line on the graph represents the agreed upon “typical” level of significance for a GWAS study.</p>
 <p>Note: the <span class="math inline">\(-log10(p)\)</span> notation means that we are transforming the visual of our p-value (p) to put more emphasis on those with the lowest values (log scale). You may notice that it is <span class="math inline">\(-log\)</span> which means that on our graph we are looking for the highest value instead of the lowest value for which SNP is most significant. (think of it like <span class="math inline">\((p)^{-5}\)</span> now looks more like <span class="math inline">\((p)^5\)</span>).</p>
 <p><strong>Adjusting for PCs</strong></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="genetic-ancestry.html#cb12-1" tabindex="-1"></a><span class="co"># empty vector to store p-values</span></span>
-<span id="cb12-2"><a href="genetic-ancestry.html#cb12-2" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb12-3"><a href="genetic-ancestry.html#cb12-3" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="genetic-ancestry.html#cb12-4" tabindex="-1"></a><span class="co"># loop through the 15 SNPs</span></span>
-<span id="cb12-5"><a href="genetic-ancestry.html#cb12-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>){</span>
-<span id="cb12-6"><a href="genetic-ancestry.html#cb12-6" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> pcadata <span class="sc">%&gt;%</span> </span>
-<span id="cb12-7"><a href="genetic-ancestry.html#cb12-7" tabindex="-1"></a>    <span class="fu">select</span>(trait, <span class="fu">paste0</span>(<span class="st">&#39;SNP&#39;</span>,i)) <span class="sc">%&gt;%</span> <span class="co"># pull out just the trait and SNP of interest</span></span>
-<span id="cb12-8"><a href="genetic-ancestry.html#cb12-8" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">PC1 =</span> pca_scores[,<span class="dv">1</span>]) <span class="co"># add the scores for PC1</span></span>
-<span id="cb12-9"><a href="genetic-ancestry.html#cb12-9" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(trait <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="co"># regress trait on everything else (.), which is SNP i and PC1</span></span>
-<span id="cb12-10"><a href="genetic-ancestry.html#cb12-10" tabindex="-1"></a>  pvals[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>coef[<span class="dv">2</span>,<span class="dv">4</span>] <span class="co"># pull out the p-value for the slope</span></span>
-<span id="cb12-11"><a href="genetic-ancestry.html#cb12-11" tabindex="-1"></a>}</span>
-<span id="cb12-12"><a href="genetic-ancestry.html#cb12-12" tabindex="-1"></a></span>
-<span id="cb12-13"><a href="genetic-ancestry.html#cb12-13" tabindex="-1"></a><span class="co"># plot -log10 pvalues</span></span>
-<span id="cb12-14"><a href="genetic-ancestry.html#cb12-14" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">p =</span> pvals, <span class="at">SNP =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-15"><a href="genetic-ancestry.html#cb12-15" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fu">log10</span>(p), <span class="at">x =</span> SNP)) <span class="sc">+</span> </span>
-<span id="cb12-16"><a href="genetic-ancestry.html#cb12-16" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb12-17"><a href="genetic-ancestry.html#cb12-17" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">8</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb12-18"><a href="genetic-ancestry.html#cb12-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
-<span id="cb12-19"><a href="genetic-ancestry.html#cb12-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Adjusted Analysis&#39;</span>)</span></code></pre></div>
-<p><img src="bookdownproj_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="genetic-ancestry.html#cb22-1" tabindex="-1"></a><span class="co"># empty vector to store p-values</span></span>
+<span id="cb22-2"><a href="genetic-ancestry.html#cb22-2" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb22-3"><a href="genetic-ancestry.html#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="genetic-ancestry.html#cb22-4" tabindex="-1"></a><span class="co"># loop through the 15 SNPs</span></span>
+<span id="cb22-5"><a href="genetic-ancestry.html#cb22-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>){</span>
+<span id="cb22-6"><a href="genetic-ancestry.html#cb22-6" tabindex="-1"></a>  dat <span class="ot">&lt;-</span> pcadata <span class="sc">%&gt;%</span> </span>
+<span id="cb22-7"><a href="genetic-ancestry.html#cb22-7" tabindex="-1"></a>    <span class="fu">select</span>(trait, <span class="fu">paste0</span>(<span class="st">&#39;SNP&#39;</span>,i)) <span class="sc">%&gt;%</span> <span class="co"># pull out just the trait and SNP of interest</span></span>
+<span id="cb22-8"><a href="genetic-ancestry.html#cb22-8" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">PC1 =</span> pca_scores[,<span class="dv">1</span>]) <span class="co"># add the scores for PC1</span></span>
+<span id="cb22-9"><a href="genetic-ancestry.html#cb22-9" tabindex="-1"></a>  mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(trait <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="co"># regress trait on everything else (.), which is SNP i and PC1</span></span>
+<span id="cb22-10"><a href="genetic-ancestry.html#cb22-10" tabindex="-1"></a>  pvals[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod)<span class="sc">$</span>coef[<span class="dv">2</span>,<span class="dv">4</span>] <span class="co"># pull out the p-value for the slope</span></span>
+<span id="cb22-11"><a href="genetic-ancestry.html#cb22-11" tabindex="-1"></a>}</span>
+<span id="cb22-12"><a href="genetic-ancestry.html#cb22-12" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="genetic-ancestry.html#cb22-13" tabindex="-1"></a><span class="co"># plot -log10 pvalues</span></span>
+<span id="cb22-14"><a href="genetic-ancestry.html#cb22-14" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">p =</span> pvals, <span class="at">SNP =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-15"><a href="genetic-ancestry.html#cb22-15" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fu">log10</span>(p), <span class="at">x =</span> SNP)) <span class="sc">+</span> </span>
+<span id="cb22-16"><a href="genetic-ancestry.html#cb22-16" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb22-17"><a href="genetic-ancestry.html#cb22-17" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="dv">8</span>, <span class="at">color =</span> <span class="st">&quot;firebrick&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb22-18"><a href="genetic-ancestry.html#cb22-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb22-19"><a href="genetic-ancestry.html#cb22-19" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&#39;Adjusted Analysis&#39;</span>)</span></code></pre></div>
+<p><img src="bookdownproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>After adjusting for our first PC, which explains much of the difference between the two populations, the significance of our first three SNPs goes down. Looking at where the p-values are compared to our reference line, they are below what we would consider significant.</p>
 <p>What could be the reason for the difference between the two models? We will talk about it next.</p>
 <p><br />
@@ -451,7 +454,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A term you may have come across in statistics or statistics related courses is the idea of <em>confounding</em>. In some instances, all you may know about a confounding variable is that you should adjust for it. But what does it mean to adjust for a confounding variable and how do we really know if a variable is confounding or not?</p>
 <p>Nearly all genetics studies are observational studies. This means that the researcher simply collects genetic data or uses existing data and views the trends present. Mainly we use observational studies because there are plenty of ethical concerns that come with experimental human genetic studies. Just like you need to be sure to account for different variables in an experiment that can affect your collection and results, you also need to be aware of variables that interact with observational studies.</p>
 <p>A term you may be less familiar is <em>Directed Acyclic Graph</em> (DAG). These are graphs where the edges are directed, or have arrows explaining the direction of how variables are related or “cause” each other. So, if we think of a basic linear model, we can draw a DAG that shows how we think our variables in the model are related.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-26"></span>
 <img src="images/DAG-simple.png" alt="*QQ plot example*" width="50%" />
 <p class="caption">
 Figure 2.1: <em>QQ plot example</em>
@@ -463,7 +466,7 @@ Figure 2.1: <em>QQ plot example</em>
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> must be associated (“cause”) our outcome <span class="math inline">\(Y\)</span>.</p></li>
 <li><p>Confounding variable <span class="math inline">\(Z\)</span> cannot be on the causal pathway between predictor <span class="math inline">\(X\)</span> and outcome <span class="math inline">\(Y\)</span>.</p></li>
 </ol>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-27"></span>
 <img src="images/DAG-confound.png" alt="*QQ plot example*" width="50%" />
 <p class="caption">
 Figure 2.2: <em>QQ plot example</em>
@@ -473,7 +476,7 @@ Figure 2.2: <em>QQ plot example</em>
 <div id="omitted-variable-bias" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Omitted Variable Bias<a href="genetic-ancestry.html#omitted-variable-bias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another set of terms you may or may not be familiar with are <em>bias</em> and <em>variance</em>. Bias refers to how far away we are from true value while variance refers to how much our results differ from attempt to attempt.</p>
-<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-28"></span>
 <img src="images/bias-variance.png" alt="*QQ plot example*" width="70%" />
 <p class="caption">
 Figure 2.3: <em>QQ plot example</em>
